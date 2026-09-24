@@ -4,10 +4,11 @@ import { PeliculasService } from '../../core/services/peliculas.service';
 import { Genero, Pelicula } from '../../core/models/pelicula';
 import { DuracionPipe } from '../../shared/pipes/duracion.pipe';
 import { BuscarPipe } from '../../shared/pipes/buscar.pipe';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-cartelera',
-  imports: [UpperCasePipe, DuracionPipe, BuscarPipe],
+  imports: [UpperCasePipe, DuracionPipe, BuscarPipe, RouterLink],
   templateUrl: './cartelera.html',
   styleUrl: './cartelera.scss',
 })

@@ -19,7 +19,7 @@
     @let lista = peliculas() | buscar: texto() : generoId();
     <div class="grilla">
       @for (p of lista; track p.id) {
-        <article class="ticket">
+        <a class="ticket" [routerLink]="['/pelicula', p.id]">
           <img class="ticket__poster" [src]="p.imagen_url || '/posters/placeholder.svg'"
                [alt]="'Póster de ' + p.titulo" (error)="sinPoster($event)">
           <div class="ticket__cuerpo">
@@ -34,7 +34,7 @@
               }
             </p>
           </div>
-        </article>
+        </a>
       } @empty {
         <p class="nota">Ninguna película coincide. Probá con otro título o elegí "Todos".</p>
       }

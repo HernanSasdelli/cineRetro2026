@@ -1,0 +1,19 @@
+<header class="header">
+  <a routerLink="/cartelera" class="header__logo">Cine <span>Retro 2026</span></a>
+
+  <nav class="header__nav">
+    <a routerLink="/cartelera" routerLinkActive="activo">Cartelera</a>
+
+    @if (auth.logueado()) {
+      <a routerLink="/perfil" routerLinkActive="activo">{{ auth.perfil()?.nombre ?? 'Mi perfil' }}</a>
+      <!-- solo visual, la seguridad es la RLS -->
+      @if (auth.rol() === 'admin') {
+        <a routerLink="/admin" routerLinkActive="activo">Admin</a>
+      }
+      <button class="btn btn--claro" (click)="salir()">Salir</button>
+    } @else {
+      <a routerLink="/login" routerLinkActive="activo">Ingresar</a>
+      <a routerLink="/registro" class="btn btn--naranja">Registrarse</a>
+    }
+  </nav>
+</header>

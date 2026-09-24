@@ -1,0 +1,53 @@
+<section class="tarjeta">
+  <h1>Nueva película</h1>
+
+  <form [formGroup]="form" (ngSubmit)="guardar()">
+    <label>Título <input formControlName="titulo"></label>
+    @if (form.controls.titulo.touched && form.controls.titulo.invalid) { <small class="error">El título es obligatorio</small> }
+
+    <label>Sinopsis <textarea formControlName="sinopsis" rows="4"></textarea></label>
+    @if (form.controls.sinopsis.touched && form.controls.sinopsis.invalid) { <small class="error">La sinopsis es obligatoria (máximo 600 caracteres)</small> }
+
+    <div class="fila">
+      <label>Duración en minutos <input type="number" formControlName="duracion_min"></label>
+      <label>Póster <input formControlName="imagen_url" placeholder="/posters/archivo.jpg"></label>
+    </div>
+    @if (form.controls.duracion_min.touched && form.controls.duracion_min.invalid) { <small class="error">Entre 1 y 400 minutos</small> }
+
+    <fieldset>
+      <legend>Restricción de edad</legend>
+      <div class="chips">
+        @for (e of edades; track e) {
+          <button type="button" class="chip"
+                  [class.activo]="form.controls.restriccion_edad.value === e"
+                  (click)="form.controls.restriccion_edad.setValue(e)">
+            {{ e === 0 ? 'ATP' : '+' + e }}
+          </button>
+        }
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Géneros</legend>
+      <div class="chips">
+        @for (g of generos(); track g.id) {
+          <button type="button" class="chip"
+                  [class.activo]="form.controls.generoIds.value.includes(g.id)"
+                  (click)="toggleGenero(g.id)">{{ g.nombre }}</button>
+        }
+      </div>
+      @if (form.controls.generoIds.touched && form.controls.generoIds.invalid) {
+        <small class="error">Elegí al menos un género</small>
+      }
+    </fieldset>
+
+    @if (error()) { <p class="error">{{ error() }}</p> }
+
+    <div class="acciones">
+      <a routerLink="/admin" class="btn btn--linea">Cancelar</a>
+      <button type="submit" class="btn" [disabled]="guardando()">
+        {{ guardando() ? 'Guardando...' : 'Guardar película' }}
+      </button>
+    </div>
+  </form>
+</section>

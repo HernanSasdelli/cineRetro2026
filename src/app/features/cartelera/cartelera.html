@@ -1,0 +1,43 @@
+<section class="cartelera">
+  <header class="cartelera__cabecera">
+    <h1>En cartelera</h1>
+    <input type="search" class="buscador" placeholder="Buscar por título"
+           aria-label="Buscar película" [value]="texto()" (input)="buscar($event)">
+    <div class="chips" role="group" aria-label="Filtrar por género">
+      <button class="chip" [class.activo]="generoId() === null" (click)="generoId.set(null)">Todos</button>
+      @for (g of generos(); track g.id) {
+        <button class="chip" [class.activo]="generoId() === g.id" (click)="generoId.set(g.id)">{{ g.nombre }}</button>
+      }
+    </div>
+  </header>
+
+  @if (cargando()) {
+    <p class="nota">Cargando cartelera...</p>
+  } @else if (error()) {
+    <p class="error">{{ error() }}</p>
+  } @else {
+    @let lista = peliculas() | buscar: texto() : generoId();
+    <div class="grilla">
+      @for (p of lista; track p.id) {
+        <article class="ticket">
+          <img class="ticket__poster" [src]="p.imagen_url || '/posters/placeholder.svg'"
+               [alt]="'Póster de ' + p.titulo" (error)="sinPoster($event)">
+          <div class="ticket__cuerpo">
+            <h2>{{ p.titulo | uppercase }}</h2>
+            <p class="ticket__meta">
+              {{ p.duracion_min | duracion }}
+              @if (p.restriccion_edad) { <span class="edad">+{{ p.restriccion_edad }}</span> }
+            </p>
+            <p class="ticket__generos">
+              @for (g of p.generos; track g.id; let ultimo = $last) {
+                {{ g.nombre }}@if (!ultimo) {, }
+              }
+            </p>
+          </div>
+        </article>
+      } @empty {
+        <p class="nota">Ninguna película coincide. Probá con otro título o elegí "Todos".</p>
+      }
+    </div>
+  }
+</section>

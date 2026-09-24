@@ -1,0 +1,10 @@
+.admin__cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--e3);
+  margin-bottom: var(--e4);
+
+  h1 { margin: 0; }
+}

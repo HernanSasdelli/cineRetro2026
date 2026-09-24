@@ -1,0 +1,31 @@
+<section class="admin">
+  <header class="admin__cabecera">
+    <h1>Administración</h1>
+    <a routerLink="peliculas/nueva" class="btn">Nueva película</a>
+  </header>
+
+  @if (error()) { <p class="error">{{ error() }}</p> }
+
+  <div class="tabla-scroll">
+    <table class="tabla">
+      <thead>
+        <tr><th>Título</th><th>Duración</th><th>Edad</th><th>Géneros</th><th>Estado</th></tr>
+      </thead>
+      <tbody>
+        @for (p of peliculas(); track p.id) {
+          <tr>
+            <td>{{ p.titulo }}</td>
+            <td>{{ p.duracion_min | duracion }}</td>
+            <td>{{ p.restriccion_edad ? '+' + p.restriccion_edad : 'ATP' }}</td>
+            <td>{{ p.generos.length }}</td>
+            <td>{{ p.activa ? 'Visible' : 'Oculta' }}</td>
+          </tr>
+        } @empty {
+          <tr><td colspan="5">Todavía no hay películas cargadas.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+ 
+</section>

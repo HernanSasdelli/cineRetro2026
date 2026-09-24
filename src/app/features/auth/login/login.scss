@@ -1,0 +1,9 @@
+.acceso-rapido {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--e2);
+  margin-top: var(--e4);
+  padding-top: var(--e3);
+  border-top: 2px dashed var(--gris);
+}

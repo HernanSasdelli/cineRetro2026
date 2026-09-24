@@ -1,0 +1,9 @@
+.datos {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--e2) var(--e4);
+  margin: 0 0 var(--e4);
+
+  dt { font-weight: 600; color: var(--gris); }
+  dd { margin: 0; }
+}

@@ -8,3 +8,12 @@
 
   h1 { margin: 0; }
 }
+.acciones-tabla {
+  display: flex;
+  gap: var(--e2);
+  white-space: nowrap;
+
+  .btn { padding: var(--e1) var(--e2); font-size: .85rem; }
+}
+
+.oculta td { color: var(--gris); }

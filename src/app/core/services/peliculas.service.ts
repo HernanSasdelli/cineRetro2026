@@ -29,4 +29,33 @@ export class PeliculasService {
     const { error: e2 } = await this.sb.from('pelicula_genero').insert(filas);
     if (e2) throw e2;
   }
+
+  async obtener(id: number): Promise<Pelicula> {
+    const { data, error } = await this.sb
+      .from('peliculas')
+      .select('*, generos(id, nombre)')
+      .eq('id', id)
+      .single();
+    if (error) throw error;
+    return data as Pelicula;
+  }
+
+  async actualizar(id: number, peli: NuevaPelicula, generoIds: number[]) {
+    const { error } = await this.sb.from('peliculas').update(peli).eq('id', id);
+    if (error) throw error;
+
+    // los generos los piso: borro los viejos y cargo los nuevos
+    const { error: e2 } = await this.sb.from('pelicula_genero').delete().eq('pelicula_id', id);
+    if (e2) throw e2;
+
+    const filas = generoIds.map(genero_id => ({ pelicula_id: id, genero_id }));
+    const { error: e3 } = await this.sb.from('pelicula_genero').insert(filas);
+    if (e3) throw e3;
+  }
+
+  // baja logica, no se borra porque va a tener funciones y entradas
+  async cambiarVisible(id: number, activa: boolean) {
+    const { error } = await this.sb.from('peliculas').update({ activa }).eq('id', id);
+    if (error) throw error;
+  }
 }

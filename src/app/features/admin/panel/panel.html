@@ -9,19 +9,25 @@
   <div class="tabla-scroll">
     <table class="tabla">
       <thead>
-        <tr><th>Título</th><th>Duración</th><th>Edad</th><th>Géneros</th><th>Estado</th></tr>
+        <tr><th>Título</th><th>Duración</th><th>Edad</th><th>Géneros</th><th>Estado</th><th>Acciones</th></tr>
       </thead>
       <tbody>
         @for (p of peliculas(); track p.id) {
-          <tr>
+          <tr [class.oculta]="!p.activa">
             <td>{{ p.titulo }}</td>
             <td>{{ p.duracion_min | duracion }}</td>
             <td>{{ p.restriccion_edad ? '+' + p.restriccion_edad : 'ATP' }}</td>
             <td>{{ p.generos.length }}</td>
             <td>{{ p.activa ? 'Visible' : 'Oculta' }}</td>
+            <td class="acciones-tabla">
+              <a [routerLink]="['peliculas', p.id]" class="btn btn--linea">Editar</a>
+              <button class="btn btn--linea" (click)="cambiarVisible(p)">
+                {{ p.activa ? 'Ocultar' : 'Mostrar' }}
+              </button>
+            </td>
           </tr>
         } @empty {
-          <tr><td colspan="5">Todavía no hay películas cargadas.</td></tr>
+          <tr><td colspan="6">Todavía no hay películas cargadas.</td></tr>
         }
       </tbody>
     </table>

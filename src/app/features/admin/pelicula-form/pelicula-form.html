@@ -1,5 +1,5 @@
 <section class="tarjeta">
-  <h1>Nueva película</h1>
+    <h1>{{ id() ? 'Editar película' : 'Nueva película' }}</h1>
 
   <form [formGroup]="form" (ngSubmit)="guardar()">
     <label>Título <input formControlName="titulo"></label>
@@ -46,7 +46,7 @@
     <div class="acciones">
       <a routerLink="/admin" class="btn btn--linea">Cancelar</a>
       <button type="submit" class="btn" [disabled]="guardando()">
-        {{ guardando() ? 'Guardando...' : 'Guardar película' }}
+               {{ guardando() ? 'Guardando...' : (id() ? 'Guardar cambios' : 'Guardar película') }}
       </button>
     </div>
   </form>

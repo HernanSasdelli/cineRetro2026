@@ -6,4 +6,9 @@ export const ADMIN_ROUTES: Routes = [
     path: 'peliculas/nueva',
     loadComponent: () => import('./pelicula-form/pelicula-form').then(m => m.PeliculaForm),
   },
+  {
+    // mismo form, pero con id = editar
+    path: 'peliculas/:id',
+    loadComponent: () => import('./pelicula-form/pelicula-form').then(m => m.PeliculaForm),
+  },
 ];

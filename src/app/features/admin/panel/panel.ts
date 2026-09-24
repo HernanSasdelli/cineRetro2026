@@ -22,4 +22,16 @@ export class Panel implements OnInit {
       this.error.set('No se pudieron cargar las películas.');
     }
   }
+
+  async cambiarVisible(p: Pelicula) {
+    try {
+      await this.pelisService.cambiarVisible(p.id, !p.activa);
+      // actualizo la lista local sin volver a pedir todo
+      this.peliculas.update(lista =>
+        lista.map(x => (x.id === p.id ? { ...x, activa: !x.activa } : x)),
+      );
+    } catch {
+      this.error.set('No se pudo cambiar la visibilidad.');
+    }
+  }
 }

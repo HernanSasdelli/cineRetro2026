@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, input, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { PeliculasService } from '../../../core/services/peliculas.service';
@@ -14,6 +14,9 @@ export class PeliculaForm implements OnInit {
   private fb = inject(NonNullableFormBuilder);
   private pelisService = inject(PeliculasService);
   private router = inject(Router);
+
+  // llega solo desde la ruta peliculas/:id (withComponentInputBinding)
+  id = input<string>();
 
   generos = signal<Genero[]>([]);
   error = signal('');
@@ -31,7 +34,24 @@ export class PeliculaForm implements OnInit {
   });
 
   async ngOnInit() {
-    this.generos.set(await this.pelisService.generos());
+    try {
+      this.generos.set(await this.pelisService.generos());
+
+      const id = this.id();
+      if (id) {
+        const p = await this.pelisService.obtener(Number(id));
+        this.form.setValue({
+          titulo: p.titulo,
+          sinopsis: p.sinopsis,
+          duracion_min: p.duracion_min,
+          restriccion_edad: p.restriccion_edad,
+          imagen_url: p.imagen_url ?? '',
+          generoIds: p.generos.map(g => g.id),
+        });
+      }
+    } catch {
+      this.error.set('No se pudo cargar la película.');
+    }
   }
 
   toggleGenero(id: number) {
@@ -48,8 +68,15 @@ export class PeliculaForm implements OnInit {
     this.guardando.set(true);
     this.error.set('');
     const { generoIds, imagen_url, ...resto } = this.form.getRawValue();
+    const peli = { ...resto, imagen_url: imagen_url || null };
+
     try {
-      await this.pelisService.crear({ ...resto, imagen_url: imagen_url || null }, generoIds);
+      const id = this.id();
+      if (id) {
+        await this.pelisService.actualizar(Number(id), peli, generoIds);
+      } else {
+        await this.pelisService.crear(peli, generoIds);
+      }
       this.router.navigate(['/admin']);
     } catch {
       // si no sos admin la RLS lo rechaza y cae aca

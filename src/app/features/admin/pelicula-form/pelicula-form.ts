@@ -1,8 +1,9 @@
-import { Component, OnInit, inject, input, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PeliculasService } from '../../../core/services/peliculas.service';
 import { Genero } from '../../../core/models/pelicula';
+import { ConCambios } from '../../../core/guards/cambios.guard';
 
 @Component({
   selector: 'app-pelicula-form',
@@ -10,13 +11,14 @@ import { Genero } from '../../../core/models/pelicula';
   templateUrl: './pelicula-form.html',
   styleUrl: './pelicula-form.scss',
 })
-export class PeliculaForm implements OnInit {
+export class PeliculaForm implements OnInit, ConCambios {
   private fb = inject(NonNullableFormBuilder);
   private pelisService = inject(PeliculasService);
   private router = inject(Router);
 
-  // llega solo desde la ruta peliculas/:id (withComponentInputBinding)
-  id = input<string>();
+private route = inject(ActivatedRoute);
+// null = pelicula nueva, si viene un numero = editar
+id = this.route.snapshot.paramMap.get('id');
 
   generos = signal<Genero[]>([]);
   error = signal('');
@@ -37,7 +39,7 @@ export class PeliculaForm implements OnInit {
     try {
       this.generos.set(await this.pelisService.generos());
 
-      const id = this.id();
+      const id = this.id;
       if (id) {
         const p = await this.pelisService.obtener(Number(id));
         this.form.setValue({
@@ -54,10 +56,16 @@ export class PeliculaForm implements OnInit {
     }
   }
 
+  // lo pregunta el cambiosGuard al salir
+  tieneCambios() {
+    return this.form.dirty;
+  }
+
   toggleGenero(id: number) {
     const c = this.form.controls.generoIds;
     c.setValue(c.value.includes(id) ? c.value.filter(x => x !== id) : [...c.value, id]);
     c.markAsTouched();
+    c.markAsDirty(); // los chips no lo marcan solos
   }
 
   async guardar() {
@@ -71,12 +79,13 @@ export class PeliculaForm implements OnInit {
     const peli = { ...resto, imagen_url: imagen_url || null };
 
     try {
-      const id = this.id();
+      const id = this.id;
       if (id) {
         await this.pelisService.actualizar(Number(id), peli, generoIds);
       } else {
         await this.pelisService.crear(peli, generoIds);
       }
+      this.form.markAsPristine(); // ya guardé, que el guard no pregunte
       this.router.navigate(['/admin']);
     } catch {
       // si no sos admin la RLS lo rechaza y cae aca

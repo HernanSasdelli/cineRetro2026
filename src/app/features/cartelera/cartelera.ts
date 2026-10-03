@@ -1,14 +1,14 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { UpperCasePipe } from '@angular/common';
+
 import { PeliculasService } from '../../core/services/peliculas.service';
 import { Genero, Pelicula } from '../../core/models/pelicula';
-import { DuracionPipe } from '../../shared/pipes/duracion.pipe';
+
 import { BuscarPipe } from '../../shared/pipes/buscar.pipe';
-import { RouterLink } from '@angular/router';
+import { TarjetaPelicula } from './tarjeta-pelicula/tarjeta-pelicula';
 
 @Component({
   selector: 'app-cartelera',
-  imports: [UpperCasePipe, DuracionPipe, BuscarPipe, RouterLink],
+  imports: [BuscarPipe, TarjetaPelicula],
   templateUrl: './cartelera.html',
   styleUrl: './cartelera.scss',
 })
@@ -23,6 +23,8 @@ export class Cartelera implements OnInit {
   error = signal('');
 
   async ngOnInit() {
+
+    //aca esta el cach que no entendia!! es igual que en c#
     try {
       const [pelis, gens] = await Promise.all([
         this.pelisService.listar(),
@@ -41,8 +43,5 @@ export class Cartelera implements OnInit {
     this.texto.set((e.target as HTMLInputElement).value);
   }
 
-  // si todavia no hice el poster
-  sinPoster(e: Event) {
-    (e.target as HTMLImageElement).src = '/posters/placeholder.svg';
-  }
+//eñ sin poster lo mande a  la tarjeta de la peli, no vive mas en el padre
 }

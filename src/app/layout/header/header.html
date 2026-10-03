@@ -6,9 +6,11 @@
 
     @if (auth.logueado()) {
       <a routerLink="/perfil" routerLinkActive="activo">{{ auth.perfil()?.nombre ?? 'Mi perfil' }}</a>
-      <!-- solo visual, la seguridad es la RLS -->
+
+
+      <!-- solo visual, la seguridad es la RLS (meterse con f12 salteando el html)-->
       @if (auth.rol() === 'admin') {
-        <a routerLink="/admin" routerLinkActive="activo">Admin</a>
+        <a *appSoloAdmin routerLink="/admin" routerLinkActive="activo">Admin</a>
       }
       <button class="btn btn--claro" (click)="salir()">Salir</button>
     } @else {

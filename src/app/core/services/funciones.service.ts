@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import { Funcion, Sala, Precio} from '../models/funcion';
+import { Funcion, Sala, Precio,FuncionConDatos} from '../models/funcion';
 
 
 @Injectable({ providedIn: 'root' }) //esta clase se puede injectar, como adsington en ASP.NET
@@ -28,5 +28,16 @@ export class FuncionesService {
   async crear(funcion: Omit<Funcion, 'id'>) { //omit es omitir, le saco el id, porque la base lo genera sola
     const { error } = await this.sb.from('funciones').insert(funcion);
     if (error) throw error;
+  }
+
+    // funciones que todavia no empezaron, con el titulo y la sala (join)
+  async proximas(): Promise<FuncionConDatos[]> {
+    const { data, error } = await this.sb
+      .from('funciones')
+      .select('*, peliculas(titulo), salas(nombre)')
+      .gte('inicio', new Date().toISOString())
+      .order('inicio');
+    if (error) throw error;
+    return data;
   }
 }

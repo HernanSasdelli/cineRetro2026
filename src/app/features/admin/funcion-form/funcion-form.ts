@@ -304,7 +304,7 @@ export class FuncionForm implements OnInit, ConCambios {
     this.guardado = creadas > 0;   // si se creo alguna, que el guard no pregunte
 
     if (fallidas.length === 0) {
-      this.router.navigate(['/admin']);
+      this.router.navigate(['/admin/funciones']);
     } else {
       this.error.set('Se crearon ' + creadas + ' funciones. No se pudieron crear: ' + fallidas.join(', '));
     }

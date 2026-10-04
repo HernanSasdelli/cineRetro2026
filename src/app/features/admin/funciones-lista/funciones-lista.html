@@ -1,0 +1,28 @@
+<header class="admin__cabecera">
+  <h2>Próximas funciones</h2>
+  <a routerLink="/admin/funciones/nueva" class="btn">Nueva función</a>
+</header>
+
+@if (error()) { <p class="error">{{ error() }}</p> }
+
+<div class="tabla-scroll">
+  <table class="tabla">
+    <thead>
+      <tr><th>Fecha</th><th>Película</th><th>Sala</th><th>Formato</th><th>Idioma</th><th>Precio</th></tr>
+    </thead>
+    <tbody>
+      @for (f of funciones(); track f.id) {
+        <tr>
+          <td>{{ f.inicio | date: 'EEE dd/MM HH:mm' }}</td>
+          <td>{{ f.peliculas.titulo }}</td>
+          <td>{{ f.salas.nombre }}</td>
+          <td>{{ f.formato }}</td>
+          <td>{{ f.idioma | titlecase }}</td>
+          <td>{{ f.precio | currency: 'ARS' }}</td>
+        </tr>
+      } @empty {
+        <tr><td colspan="6">No hay funciones programadas.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>

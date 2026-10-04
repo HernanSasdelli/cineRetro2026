@@ -1,9 +1,9 @@
 <section class="admin">
 <header class="admin__cabecera">
-  <h1>Administración</h1>
+  <h2>Películas</h2>
   <div class="admin__acciones">
-    <a routerLink="peliculas/nueva" class="btn">Nueva película</a>
-    <a routerLink="funciones/nueva" class="btn">Nueva función</a>
+    <a routerLink="/admin/peliculas/nueva" class="btn">Nueva película</a>
+    
   </div>
 </header>
 
@@ -23,7 +23,7 @@
             <td>{{ p.generos.length }}</td>
             <td>{{ p.activa ? 'Visible' : 'Oculta' }}</td>
             <td class="acciones-tabla">
-              <a [routerLink]="['peliculas', p.id]" class="btn btn--linea">Editar</a>
+              <a [routerLink]="['/admin/peliculas', p.id]" class="btn btn--linea">Editar</a>
               <button class="btn btn--linea" (click)="cambiarVisible(p)">
                 {{ p.activa ? 'Ocultar' : 'Mostrar' }}
               </button>

@@ -40,5 +40,11 @@ export const routes: Routes = [
     canDeactivate: [cambiosGuard],
     loadComponent: () => import('./features/compra/compra').then(m => m.Compra),
   },
+
+  {
+    // publica: la entrada se ve con el codigo, aunque haya comprado sin cuenta
+    path: 'entrada/:codigo',
+    loadComponent: () => import('./features/entrada/entrada').then(m => m.Entrada),
+  },
   { path: '**', redirectTo: 'cartelera' },
 ];

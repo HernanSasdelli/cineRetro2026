@@ -1,1 +1,23 @@
-<p>entrada works!</p>
+<!-- <p>entrada works!</p> -->
+@if (pedido(); as p) {
+  <section class="entrada">
+    <p class="entrada__cine">CINE RETRO · ENTRADA</p>
+    <h1>{{ p.pelicula | uppercase }}</h1>
+    <p>{{ p.inicio | date: 'EEEE dd/MM/yyyy · HH:mm' }} h</p>
+    <p>{{ p.sala }} · {{ p.formato }} {{ p.idioma | titlecase }}</p>
+    <p><strong>Butacas:</strong> {{ p.butacas.join(', ') }}</p>
+    <p><strong>Total:</strong> {{ p.total | currency: 'ARS' }}</p>
+
+    <img class="entrada__qr" [src]="qr()" alt="Código QR de la entrada">
+    <p class="entrada__nota">Mostrá este código en la entrada de la sala.</p>
+  </section>
+
+  <div class="acciones no-imprimir">
+    <button class="btn" (click)="imprimir()">Descargar PDF</button>
+    <a routerLink="/cartelera" class="btn btn--linea">Volver a la cartelera</a>
+  </div>
+} @else if (error()) {
+  <p class="error">{{ error() }}</p>
+} @else {
+  <p class="nota">Cargando tu entrada...</p>
+}

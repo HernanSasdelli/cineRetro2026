@@ -26,12 +26,44 @@
       <small class="error">Elegí una sala</small>
     }
 
-    <label>Fecha <input type="date" formControlName="fecha"></label>
-    @if (form.controls.fecha.touched && form.controls.fecha.invalid) {
-      <small class="error">Elegí la fecha</small>
+
+    <fieldset>
+      <legend>Desde</legend>
+      <div class="chips">
+        @for (d of proximosDias; track d.fecha) {
+          <button type="button" class="chip"
+                  [class.activo]="form.controls.desde.value === d.fecha"
+                  (click)="elegirDesde(d.fecha)">{{ d.etiqueta }}</button>
+        }
+      </div>
+      <label>Otra fecha <input type="date" formControlName="desde" [min]="hoy"></label>
+    </fieldset>
+
+        <fieldset>
+      <legend>Días</legend>
+      <div class="chips">
+        @for (n of diasSemana; track n) {
+          <button type="button" class="chip"
+                  [class.activo]="form.controls.dias.value?.includes(n)"
+                  (click)="toggleDia(n)">{{ nombresDias[n] }}</button>
+        }
+      </div>
+    </fieldset>
+    @if (form.controls.dias.invalid) {
+      <small class="error">Elegí al menos un día</small>
     }
 
     <fieldset>
+      <legend>Durante</legend>
+      <div class="chips">
+        @for (s of semanasOpciones; track s) {
+          <button type="button" class="chip"
+                  [class.activo]="form.controls.semanas.value === s"
+                  (click)="elegirSemanas(s)">{{ s }} {{ s === 1 ? 'semana' : 'semanas' }}</button>
+        }
+      </div>
+    </fieldset>
+        <fieldset>
       <legend>Hora</legend>
       <div class="chips">
         @for (h of horarios; track h) {
@@ -42,6 +74,10 @@
       </div>
       <label>Otra hora <input type="time" formControlName="hora"></label>
     </fieldset>
+    @if (form.controls.hora.touched && form.controls.hora.invalid) {
+      <small class="error">Elegí la hora</small>
+    }
+    
     @if (form.controls.hora.touched && form.controls.hora.invalid) {
       <small class="error">Elegí la hora</small>
     }

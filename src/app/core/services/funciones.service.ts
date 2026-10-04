@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import { Funcion, Sala } from '../models/funcion';
+import { Funcion, Sala, Precio} from '../models/funcion';
+
 
 @Injectable({ providedIn: 'root' }) //esta clase se puede injectar, como adsington en ASP.NET
 export class FuncionesService {
@@ -14,6 +15,12 @@ export class FuncionesService {
       .eq('activa', true)
       .order('nombre');
     if (error) throw error; // si viene error lo hago una excepction.
+    return data;
+  }
+    // precio de cada formato, para sugerirlo al cargar funciones
+  async precios(): Promise<Precio[]> {
+    const { data, error } = await this.sb.from('precios').select('*');
+    if (error) throw error;
     return data;
   }
 

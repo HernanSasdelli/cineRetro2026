@@ -6,12 +6,14 @@ import { Pelicula } from '../../../core/models/pelicula';
 import { PeliculasService } from '../../../core/services/peliculas.service';
 import { FuncionesService } from '../../../core/services/funciones.service';
 import { ConCambios } from '../../../core/guards/cambios.guard';
-import { Formato, Idioma, Sala } from '../../../core/models/funcion';
+import { Formato, Idioma, Sala, Precio } from '../../../core/models/funcion';
+
+import { TitleCasePipe } from '@angular/common';
 
 
 @Component({
   selector: 'app-funcion-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TitleCasePipe],
   templateUrl: './funcion-form.html',
   styleUrl: './funcion-form.scss',
 })
@@ -23,6 +25,10 @@ export class FuncionForm implements OnInit, ConCambios {
 
   peliculas = signal<Pelicula[]>([]);
   salas = signal<Sala[]>([]);
+  precios = signal<Precio[]>([]);
+  formatos: Formato[] = ['2D', '3D', '4D', '5D'];
+  idiomas: Idioma[] = ['castellano', 'subtitulada'];
+  horarios = ['15:30', '18:00', '20:00', '22:30'];
   error = signal('');
   guardando = signal(false);
   private guardado = false;
@@ -42,6 +48,9 @@ export class FuncionForm implements OnInit, ConCambios {
     try {
       this.peliculas.set(await this.pelisService.listar());
       this.salas.set(await this.funcionesService.salas());
+      this.precios.set(await this.funcionesService.precios());
+      this.sugerirPrecio('2D');
+
     } catch {
       this.error.set('No se pudieron cargar las películas o las salas.');
     }
@@ -50,6 +59,33 @@ export class FuncionForm implements OnInit, ConCambios {
   // la llama el cambiosGuard antes de salir
   tieneCambios() {
     return this.form.dirty && !this.guardado;
+  }
+
+
+    // marca el formato y pone el precio de ese formato
+  elegirFormato(f: Formato) {
+    this.form.controls.formato.setValue(f);
+    this.sugerirPrecio(f);
+    this.form.markAsDirty();
+  }
+
+  // busca en la tabla precios el de ese formato
+  private sugerirPrecio(f: Formato) {
+    for (const p of this.precios()) {
+      if (p.formato === f) {
+        this.form.controls.precio.setValue(p.precio);
+      }
+    }
+  }
+
+  elegirIdioma(i: Idioma) {
+    this.form.controls.idioma.setValue(i);
+    this.form.markAsDirty();
+  }
+
+  elegirHora(h: string) {
+    this.form.controls.hora.setValue(h);
+    this.form.markAsDirty();
   }
 
     // arma la funcion con los datos del form y la manda a la base

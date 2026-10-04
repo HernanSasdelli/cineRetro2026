@@ -21,3 +21,8 @@ export interface Funcion {
   idioma: Idioma;
   precio: number;
 }
+// precio sugerido por formato (tabla precios)
+export interface Precio {
+  formato: Formato;
+  precio: number;
+}

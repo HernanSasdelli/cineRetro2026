@@ -1,0 +1,13 @@
+// la entrada con forma de ticket impreso
+.entrada {
+  max-width: 380px;
+  margin: 1.5rem auto;
+  padding: 1.5rem;
+  text-align: center;
+  background: #fffaf0;
+  border: 2px dashed #2b1f1a;
+}
+.entrada__cine { letter-spacing: 0.3em; font-size: 0.75rem; }
+.entrada__qr { display: block; margin: 1rem auto 0.5rem; }
+.entrada__nota { font-size: 0.8rem; }
+.acciones { display: flex; gap: 0.5rem; justify-content: center; }

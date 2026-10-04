@@ -1,0 +1,58 @@
+// mapa de butacas: cada butaca es un boton chiquito
+.compra { max-width: 1000px; margin: 0 auto; }
+
+.pantalla {
+  text-align: center;
+  margin: 1rem 0 1.5rem;
+  border-bottom: 4px solid currentColor;
+  letter-spacing: 0.4em;
+  font-size: 0.8rem;
+}
+
+// en el celu el mapa no entra: se scrollea de costado
+.mapa { overflow-x: auto; padding-bottom: 0.5rem; }
+
+.mapa__fila {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin: 0 auto 3px;
+  width: max-content;
+}
+
+.mapa__letra { width: 1.2rem; text-align: center; font-weight: bold; font-size: 0.75rem; }
+
+.butaca {
+  display: inline-block;
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
+  font-size: 0.6rem;
+  border: 1px solid #2b1f1a;
+  border-radius: 5px 5px 2px 2px;
+  background: #fffaf0;
+  cursor: pointer;
+}
+
+// el orden importa: lo de abajo pisa a lo de arriba
+.butaca.vip { background: #f1d9a8; }
+.butaca.accesible { background: #cfe3f0; }
+.butaca.elegida { background: #e07b2e; color: #fff; }
+.butaca.ocupada { background: #9b9188; color: #9b9188; cursor: not-allowed; }
+.butaca.pasillo { margin-right: 1.2rem; }
+
+.referencias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  font-size: 0.85rem;
+}
+.referencias li { display: flex; align-items: center; gap: 0.4rem; }
+.referencias .butaca { cursor: default; }
+
+.resumen { margin-top: 1rem; }
+.resumen__total { font-weight: bold; font-size: 1.2rem; }
+.check { display: flex; gap: 0.5rem; align-items: center; }

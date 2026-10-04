@@ -28,6 +28,15 @@
       @if (p.restriccion_edad) {
         <p class="aviso">Apta para mayores de {{ p.restriccion_edad }} años. Los menores deben asistir acompañados de un adulto.</p>
       }
+            <h2>Funciones</h2>
+      @for (f of funciones(); track f.id) {
+        <a class="chip" [routerLink]="['/compra', f.id]">
+          {{ f.inicio | date: 'EEE dd/MM HH:mm' }} · {{ f.salas.nombre }} ·
+          {{ f.formato }} {{ f.idioma | titlecase }}
+        </a>
+      } @empty {
+        <p class="nota">Por ahora no hay funciones programadas.</p>
+      }
     </div>
   </article>
 } @else if (error()) {

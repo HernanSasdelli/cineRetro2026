@@ -40,4 +40,29 @@ export class FuncionesService {
     if (error) throw error;
     return data;
   }
+
+
+    // funciones de una pelicula que todavia no empezaron, para el detalle
+  async dePelicula(peliculaId: number): Promise<FuncionConDatos[]> {
+    const { data, error } = await this.sb
+      .from('funciones')
+      .select('*, peliculas(titulo), salas(nombre)')
+      .eq('pelicula_id', peliculaId)
+      .gte('inicio', new Date().toISOString())
+      .order('inicio');
+    if (error) throw error;
+    return data;
+  }
+
+    // UNA funcion con su pelicula y sala, para la pantalla de compra
+  // .single() = espero una sola fila (como Single() en C#)
+  async obtener(id: number): Promise<FuncionConDatos> {
+    const { data, error } = await this.sb
+      .from('funciones')
+      .select('*, peliculas(titulo, restriccion_edad), salas(nombre)')
+      .eq('id', id)
+      .single();
+    if (error) throw error;
+    return data;
+  }
 }

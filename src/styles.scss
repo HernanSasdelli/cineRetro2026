@@ -170,3 +170,9 @@ legend { font-weight: 600; font-size: .9rem; padding: 0 var(--e1); }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
+
+
+// al imprimir (o guardar PDF) se esconde todo lo que no es la entrada
+@media print {
+  app-header, .no-imprimir { display: none !important; }
+}

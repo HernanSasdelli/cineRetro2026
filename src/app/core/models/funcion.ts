@@ -27,8 +27,8 @@ export interface Precio {
   precio: number;
 }
 
-// funcion con el titulo de la pelicula y el nombre de la sala, para listar
-export interface FuncionConDatos extends Funcion { //HERENCIA, extiende la funcion con los datos de la pelicula y sala
-  peliculas: { titulo: string };
+// funcion con el titulo de la pelicula y el nombre de la sala, para listar y para comprar
+export interface FuncionConDatos extends Funcion {//HERENCIA, extiende la funcion con los datos de la pelicula y sala
+  peliculas: { titulo: string; restriccion_edad?: number };   // ? = no siempre la pido
   salas: { nombre: string };
 }

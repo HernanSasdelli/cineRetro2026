@@ -17,3 +17,10 @@
 }
 
 .oculta td { color: var(--gris); }
+
+// los botones de alta, uno al lado del otro
+.admin__acciones {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}

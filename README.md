@@ -75,6 +75,11 @@ src/app/
 - [x] Rutas protegidas por sesión y por rol
 - [x] Cartelera con buscador y filtro por género
 - [x] ABM de películas (alta, edición y baja lógica)
+- [x] Mejorar el codigo y la explicacion que no convencia.
+  - [x] Usar hijo - cartelera - tarjeta-pelicula
+  - [x] usar seguridad en las tablas
+  - [x] usar una directica propia, (mostrar un texto en admin(mejorar!))
+
 - [ ] Funciones con asignación automática de sala y validación de horarios
 - [ ] Mapa de butacas en tiempo real (comunes, accesibles y VIP)
 - [ ] Compra, PDF y código QR

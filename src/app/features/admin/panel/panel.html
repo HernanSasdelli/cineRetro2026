@@ -1,8 +1,11 @@
 <section class="admin">
-  <header class="admin__cabecera">
-    <h1>Administración</h1>
+<header class="admin__cabecera">
+  <h1>Administración</h1>
+  <div class="admin__acciones">
     <a routerLink="peliculas/nueva" class="btn">Nueva película</a>
-  </header>
+    <a routerLink="funciones/nueva" class="btn">Nueva función</a>
+  </div>
+</header>
 
   @if (error()) { <p class="error">{{ error() }}</p> }
 

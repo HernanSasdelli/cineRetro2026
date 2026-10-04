@@ -8,7 +8,7 @@ export const routes: Routes = [
     path: 'cartelera',
     loadComponent: () => import('./features/cartelera/cartelera').then(m => m.Cartelera),
   },
-    {
+  {
     path: 'pelicula/:id',
     loadComponent: () =>
       import('./features/pelicula-detalle/pelicula-detalle').then(m => m.PeliculaDetalle),

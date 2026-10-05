@@ -17,3 +17,15 @@ export interface Descuento {
   porcentaje: number;
   nombre: string;
 }
+
+//------------------CUPONES------------------
+
+// un cupon de la tabla cupones
+export interface Cupon {
+  id: number;
+  nombre: string;
+  porcentaje: number;
+  solo_primera_compra: boolean;
+  edad_minima: number | null;   // null es cualquier edad
+  activo: boolean;
+}

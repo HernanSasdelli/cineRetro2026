@@ -80,11 +80,11 @@ src/app/
   - [x] usar seguridad en las tablas
   - [x] usar una directica propia, (mostrar un texto en admin(mejorar!))
 
-- [ ] Funciones con asignación automática de sala y validación de horarios
+- [x] Funciones con asignación automática de sala y validación de horarios
     - [x] Validar el horario de 30 min de diferencia
-    - [ ] asignacion automatica de sala
+    - [x] asignacion automatica de sala
 - [x] Mapa de butacas en tiempo real (comunes, accesibles y VIP)
-- [x] Compra, PDF y código QR
+- [x] Compra, PDF y código QR- 
 - [ ] Validación de QR por empleados
 - [ ] Candy bar y combos
 - [ ] Cupones, puntos de fidelización y crédito por cancelación

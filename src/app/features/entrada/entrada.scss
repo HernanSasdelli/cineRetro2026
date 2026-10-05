@@ -11,3 +11,10 @@
 .entrada__qr { display: block; margin: 1rem auto 0.5rem; }
 .entrada__nota { font-size: 0.8rem; }
 .acciones { display: flex; gap: 0.5rem; justify-content: center; }
+
+.entrada__aviso {
+  margin: 1rem 0;
+  padding: 0.5rem;
+  border: 2px solid #9e2b25;
+  font-size: 0.9rem;
+}

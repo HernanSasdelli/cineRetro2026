@@ -13,17 +13,21 @@
       @for (fila of filas; track fila) {
         <div class="mapa__fila">
           <span class="mapa__letra">{{ fila }}</span>
-          @for (n of numeros; track n) {
+          
+          @for (n of numerosDe(fila); track n) {
             <button type="button" class="butaca"
                     [class.vip]="esVip(fila)"
                     [class.accesible]="esAccesible(fila)"
+                    [class.ancha]="esAccesible(fila)"
                     [class.elegida]="elegidas().includes(butaca(fila, n))"
                     [class.ocupada]="ocupadas().includes(butaca(fila, n))"
-                    [class.pasillo]="n === 4 || n === 24"
+                    [class.pasillo]="esPasillo(fila, n)"
                     [disabled]="ocupadas().includes(butaca(fila, n))"
                     [title]="butaca(fila, n)"
                     (click)="tocar(butaca(fila, n))">{{ n }}</button>
           }
+
+
           <span class="mapa__letra">{{ fila }}</span>
         </div>
       }
@@ -54,7 +58,7 @@
       @if (auth.logueado()) {
         <p>La entrada va a {{ email() }}</p>
       } @else {
-        <label>Tu mail (donde te enviaremos la entrada)
+        <label>Tu mail, para identificar tu compra
           <input type="email" [value]="email()" (input)="escribirEmail($event)">
         </label>
       }

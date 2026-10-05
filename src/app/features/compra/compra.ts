@@ -40,15 +40,26 @@ export class Compra implements OnInit, ConCambios {
   private comprado = false;   // para que el guard no pregunte despues de comprar
 
   // el mapa: 20 filas de 28 butacas. pasillos despues de la 4 y de la 24
-  filas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-           'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'];
+  filas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'
+           , 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'];
   numeros: number[] = [];
-
+ numerosJ: number[] = []; 
   //construyo la grilla
-  constructor() {
+  //ssaque la k Y LA j es diferente
+  /*constructor() {
     // 1, 2, 3 ... 28
     for (let i = 1; i <= 28; i++) {
       this.numeros.push(i);
+    }
+  }*/
+
+      //construyo la grilla
+  constructor() {
+    for (let i = 1; i <= 28; i++) {
+      this.numeros.push(i);
+    }
+    for (let i = 1; i <= 14; i++) {
+      this.numerosJ.push(i);
     }
   }
 
@@ -80,9 +91,22 @@ export class Compra implements OnInit, ConCambios {
     return fila === 'R' || fila === 'S' || fila === 'T';
   }
 
-  // filas del medio con lugar para silla de ruedas
+  
+ // la J es la fila para sillas de ruedas, quedaron 2, 10 y 2 butacas
   esAccesible(fila: string) {
-    return fila === 'J' || fila === 'K';
+    return fila === 'J';
+  }
+
+  // cuantas butacas tiene cada fila
+  numerosDe(fila: string) {
+    if (fila === 'J') return this.numerosJ;
+    return this.numeros;
+  }
+
+  // despues de que butaca va el pasillo
+  esPasillo(fila: string, n: number) {
+    if (fila === 'J') return n === 2 || n === 12;
+    return n === 4 || n === 24;
   }
 
   // toco una butaca: si estaba elegida la saco, si no la agrego (igual que los dias de funciones)

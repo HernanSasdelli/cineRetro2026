@@ -9,7 +9,8 @@ export interface Pedido {
   formato: string;
   idioma: string;
   butacas: string[];   // ['F12', 'F13']
-    descuento: number;   // porcentaje que se le desconto (0 = ninguno)
+  descuento: number;   // porcentaje que se le desconto (0 = ninguno)
+  restriccion_edad: number;   // 0 es ATP
 }
 
 // el cupon que le toca al usuario (funcion mi_descuento de la base)

@@ -40,6 +40,12 @@
 .butaca.elegida { background: #e07b2e; color: #fff; }
 .butaca.ocupada { background: #9b9188; color: #9b9188; cursor: not-allowed; }
 .butaca.pasillo { margin-right: 1.2rem; }
+// butaca para silla de ruedas, ocupa lo mismo que dos normales con el espacio del medio
+.butaca.ancha {
+  width: calc(3.2rem + 3px);
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
+}
 
 .referencias {
   display: flex;

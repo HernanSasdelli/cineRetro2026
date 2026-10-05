@@ -6,6 +6,15 @@
     <p>{{ p.inicio | date: 'EEEE dd/MM/yyyy · HH:mm' }} h</p>
     <p>{{ p.sala }} · {{ p.formato }} {{ p.idioma | titlecase }}</p>
     <p><strong>Butacas:</strong> {{ p.butacas.join(', ') }}</p>
+    
+    @if (p.restriccion_edad > 0) {
+      <p class="entrada__aviso">
+        <strong>Película para mayores de {{ p.restriccion_edad }} años.</strong>
+        Debe asistir un adulto. Se puede pedir documento en el ingreso.
+      </p>
+    }
+
+    
     <p><strong>Total:</strong> {{ p.total | currency: 'ARS' }}</p>
     @if (p.descuento > 0) { <p>Descuento aplicado: {{ p.descuento }}%</p> }
 

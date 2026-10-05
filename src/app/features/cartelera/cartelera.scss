@@ -12,57 +12,10 @@
   gap: var(--e4);
 }
 
-.ticket {
-  position: relative;
-  background: var(--papel);
-  border: var(--borde);
-  border-radius: var(--radio);
-  box-shadow: var(--sombra);
-  overflow: hidden;
 
-  &__poster {
-    display: block;
-    width: 100%;
-    aspect-ratio: 2 / 3;
-    object-fit: cover;
-    background: var(--crema-2);
-    border-bottom: 2px dashed var(--tinta); // la perforacion
-  }
-
-  // muescas a los costados de la perforacion
-  &::before, &::after {
-    content: '';
-    position: absolute;
-    top: calc(100% - 7.6rem);
-    width: 18px;
-    height: 18px;
-    background: var(--crema);
-    border: var(--borde);
-    border-radius: 50%;
-  }
-  &::before { left: -11px; }
-  &::after { right: -11px; }
-
-  &__cuerpo { padding: var(--e3); min-height: 6.5rem; }
-
-  h2 { font-size: 1.1rem; margin-bottom: var(--e2); }
-
-  &__meta { margin: 0; font-weight: 600; }
-  &__generos { margin: var(--e1) 0 0; color: var(--gris); font-size: .85rem; }
-
-  .edad {
-    margin-left: var(--e2);
-    padding: 0 var(--e2);
-    background: var(--ladrillo);
-    color: var(--crema);
-    border-radius: var(--radio);
-  }
-}
-a.ticket {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-  transition: transform .15s, box-shadow .15s;
-
-  &:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--tinta); }
+// las 3 mas vistas, separadas del resto de la cartelera
+.destacadas {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px dashed currentColor;
 }

@@ -1,4 +1,18 @@
 <app-header />
 <main class="contenedor">
   <router-outlet />
+
+  
 </main>
+
+
+<!-- cartel global de "cambios sin guardar" (lo abre el cambiosGuard desde cualquier pantalla) -->
+@if (confirmacion.pregunta()) {
+  <app-modal titulo="Cambios sin guardar"
+             textoConfirmar="Salir"
+             textoCancelar="Quedarme"
+             (confirmar)="confirmacion.contestar(true)"
+             (cancelar)="confirmacion.contestar(false)">
+    <p>{{ confirmacion.pregunta() }}</p>
+  </app-modal>
+}

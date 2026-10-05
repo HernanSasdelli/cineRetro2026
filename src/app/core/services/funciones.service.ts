@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import { Funcion, Sala, Precio,FuncionConDatos} from '../models/funcion';
+import { Funcion, Sala, Precio,FuncionConDatos, Formato} from '../models/funcion';
 
 
 @Injectable({ providedIn: 'root' }) //esta clase se puede injectar, como adsington en ASP.NET
@@ -19,7 +19,7 @@ export class FuncionesService {
   }
     // precio de cada formato, para sugerirlo al cargar funciones
   async precios(): Promise<Precio[]> {
-    const { data, error } = await this.sb.from('precios').select('*');
+        const { data, error } = await this.sb.from('precios').select('*').order('formato');//agrego el orden asi viene siemppre ordenadito
     if (error) throw error;
     return data;
   }
@@ -64,5 +64,18 @@ export class FuncionesService {
       .single();
     if (error) throw error;
     return data;
+  }
+
+    // cambia el precio de un formato. solo el admin puede (lo controla la RLS de precios)
+  async guardarPrecio(formato: Formato, precio: number) {
+    const { error } = await this.sb.from('precios').update({ precio }).eq('formato', formato);
+    if (error) throw error;
+  }
+
+    // borra una funcion (cargada por error)
+  // si ya tiene entradas vendidas la base NO deja: entradas apunta a esta funcion (error 23503)
+  async eliminar(id: number) {
+    const { error } = await this.sb.from('funciones').delete().eq('id', id);
+    if (error) throw error;
   }
 }

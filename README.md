@@ -3,7 +3,7 @@
 Aplicación web para un cine de clásicos: cartelera, registro de clientes y panel de administración.
 Trabajo Práctico 1: Programación IV, UTN FRA, 2026.
 
-**Demo:** https://TU-APP.web.app
+**Demo:** https://cineretro2026.web.app
 
 **Usuarios de prueba** (también disponibles como acceso rápido en el login):
 
@@ -81,6 +81,8 @@ src/app/
   - [x] usar una directica propia, (mostrar un texto en admin(mejorar!))
 
 - [ ] Funciones con asignación automática de sala y validación de horarios
+    - [x] Validar el horario de 30 min de diferencia
+    - [ ] asignacion automatica de sala
 - [x] Mapa de butacas en tiempo real (comunes, accesibles y VIP)
 - [x] Compra, PDF y código QR
 - [ ] Validación de QR por empleados

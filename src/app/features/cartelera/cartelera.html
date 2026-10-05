@@ -1,4 +1,15 @@
 <section class="cartelera">
+  
+    @if (destacadas().length > 0) {
+    <section class="destacadas">
+      <h2>Las más vistas</h2>
+      <div class="grilla">
+        @for (p of destacadas(); track p.id) {
+          <app-tarjeta-pelicula [pelicula]="p" />
+        }
+      </div>
+    </section>
+  }
   <header class="cartelera__cabecera">
     <h1>En cartelera</h1>
     <input type="search" class="buscador" placeholder="Buscar por título"
@@ -19,7 +30,7 @@
     
 <div class="grilla">
   @for (p of peliculas() | buscar: texto() : generoId(); track p.id) {
-    <app-tarjeta-pelicula [pelicula]="p" />
+    <app-tarjeta-pelicula [pelicula]="p" /> 
   } @empty {
     <p class="nota">Ninguna película coincide. Probá con otro título o elegí "Todos".</p>
   }

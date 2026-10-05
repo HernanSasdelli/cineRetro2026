@@ -5,6 +5,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { FuncionesService } from '../../core/services/funciones.service';
 import { ComprasService } from '../../core/services/compras.service';
 import { FuncionConDatos } from '../../core/models/funcion';
+import { Descuento } from '../../core/models/compra';   // NUEVO cupon
 import { ConCambios } from '../../core/guards/cambios.guard';
 
 // PANTALLA DE COMPRA
@@ -33,6 +34,7 @@ export class Compra implements OnInit, ConCambios {
   elegidas = signal<string[]>([]);   // las que toca el usuario, en naranja
   email = signal('');
   confirmaEdad = signal(false);
+  descuento = signal<Descuento | null>(null);   // NUEVO cupon: el que le toca, solo para mostrar
   error = signal('');
   comprando = signal(false);
   private comprado = false;   // para que el guard no pregunte despues de comprar
@@ -41,7 +43,6 @@ export class Compra implements OnInit, ConCambios {
   filas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
            'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'];
   numeros: number[] = [];
-
 
   //construyo la grilla
   constructor() {
@@ -57,10 +58,12 @@ export class Compra implements OnInit, ConCambios {
       await this.auth.listo;
       this.funcion.set(await this.funcionesService.obtener(this.funcionId));
       this.ocupadas.set(await this.comprasService.ocupadas(this.funcionId));
-      // si esta logueado uso su mail, si no lo tiene que escribir
+      // si esta logueado uso su mail y busco si le toca algun cupon
+      // sin cuenta: escribe el mail y no tiene cupon
       const usuario = this.auth.usuario();
       if (usuario?.email) {
         this.email.set(usuario.email);
+        this.descuento.set(await this.comprasService.miDescuento());   // NUEVO cupon
       }
     } catch {
       this.error.set('No se pudo cargar la función.');
@@ -107,13 +110,19 @@ export class Compra implements OnInit, ConCambios {
     return this.esVip(b[0]) ? base * 1.5 : base;
   }
 
-  // suma de las elegidas
+  // suma de las elegidas, sin descuento
   total() {
     let suma = 0;
     for (const b of this.elegidas()) {
       suma += this.precioDe(b);
     }
     return suma;
+  }
+
+  // NUEVO cupon: total con el descuento aplicado (solo para mostrar, la base calcula el real)
+  totalFinal() {
+    const porcentaje = this.descuento()?.porcentaje ?? 0;
+    return this.total() * (100 - porcentaje) / 100;
   }
 
   // EDAD
@@ -152,10 +161,10 @@ export class Compra implements OnInit, ConCambios {
 
   // COMPRAR
   // 1. reviso que haya butacas, mail y edad
-  // 2. le pido a la base que compre (todo o nada)
+  // 2. le pido a la base que compre (todo o nada). el descuento lo aplica la base
   // 3. si sale bien → a la pantalla de la entrada con el QR
-  // 4. atajo el error 23505 de la basse si alguien me gano de mano y cancelo todas las butacas elegidas
-  ///agregar tiempo de reserva tipo cinemarkl
+  // 4. atajo el error 23505 de la base si alguien me gano de mano y cancelo todas las butacas elegidas
+  ///agregar tiempo de reserva tipo cinemark
   async comprar() {
     if (this.elegidas().length === 0) {
       this.error.set('Elegí al menos una butaca.');

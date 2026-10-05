@@ -44,7 +44,12 @@
       } @empty {
         <p class="nota">Tocá las butacas que desees.</p>
       }
-      <p class="resumen__total">Total: {{ total() | currency: 'ARS' }}</p>
+      <!-- <p class="resumen__total">Total: {{ total() | currency: 'ARS' }}</p>-->
+        @if (descuento(); as d) {
+        <p>Subtotal: {{ total() | currency: 'ARS' }}</p>
+        <p><strong>{{ d.nombre }}: -{{ d.porcentaje }}%</strong></p>
+      }
+      <p class="resumen__total">Total: {{ totalFinal() | currency: 'ARS' }}</p>
 
       @if (auth.logueado()) {
         <p>La entrada va a {{ email() }}</p>

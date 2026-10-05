@@ -21,17 +21,27 @@ export class Cartelera implements OnInit {
   generoId = signal<number | null>(null);
   cargando = signal(true);
   error = signal('');
+destacadas = signal<Pelicula[]>([]);   // las 3 mas vendidas
 
+
+
+  // al entrar: traigo peliculas, generos y las 3 mas vendidas
   async ngOnInit() {
 
-    //aca esta el cach que no entendia!! es igual que en c#
+     //aca esta el cach que no entendia!! es igual que en c#
     try {
-      const [pelis, gens] = await Promise.all([
-        this.pelisService.listar(),
-        this.pelisService.generos(),
-      ]);
-      this.peliculas.set(pelis);
-      this.generos.set(gens);
+      this.peliculas.set(await this.pelisService.listar());
+      this.generos.set(await this.pelisService.generos());
+
+      // busco en la lista que ya tengo las 3 mas vendidas, en el orden que vienen
+      const ids = await this.pelisService.masVendidas();
+      const lista: Pelicula[] = [];
+      for (const id of ids) {
+        for (const p of this.peliculas()) {
+          if (p.id === id) lista.push(p);
+        }
+      }
+      this.destacadas.set(lista);
     } catch {
       this.error.set('No se pudo cargar la cartelera. Revisá la conexión y recargá la página.');
     } finally {

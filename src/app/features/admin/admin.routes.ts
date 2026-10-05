@@ -36,6 +36,11 @@ export const ADMIN_ROUTES: Routes = [
         canDeactivate: [cambiosGuard],
         loadComponent: () => import('./funcion-form/funcion-form').then(m => m.FuncionForm),
       },
+            {
+        path: 'precios',
+        canDeactivate: [cambiosGuard],
+        loadComponent: () => import('./precios/precios').then(m => m.Precios),
+      },
     ],
   },
 ];

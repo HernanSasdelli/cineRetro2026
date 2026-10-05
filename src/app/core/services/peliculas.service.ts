@@ -58,4 +58,11 @@ export class PeliculasService {
     const { error } = await this.sb.from('peliculas').update({ activa }).eq('id', id);
     if (error) throw error;
   }
+    // ids de las 3 peliculas mas vendidas, la primera es la que mas vendio
+  // el conteo lo hace la base (group by + count), aca solo recibo los ids
+  async masVendidas(): Promise<number[]> {
+    const { data, error } = await this.sb.rpc('mas_vendidas');
+    if (error) throw error;
+    return data;
+  }
 }

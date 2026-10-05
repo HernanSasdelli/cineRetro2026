@@ -8,7 +8,7 @@
 <div class="tabla-scroll">
   <table class="tabla">
     <thead>
-      <tr><th>Fecha</th><th>Película</th><th>Sala</th><th>Formato</th><th>Idioma</th><th>Precio</th></tr>
+            <tr><th>Fecha</th><th>Película</th><th>Sala</th><th>Formato</th><th>Idioma</th><th>Precio</th><th>Acciones</th></tr>
     </thead>
     <tbody>
       @for (f of funciones(); track f.id) {
@@ -19,6 +19,7 @@
           <td>{{ f.formato }}</td>
           <td>{{ f.idioma | titlecase }}</td>
           <td>{{ f.precio | currency: 'ARS' }}</td>
+          <td><button type="button" class="btn btn--linea" (click)="pedirEliminar(f)">Eliminar</button></td>
         </tr>
       } @empty {
         <tr><td colspan="6">No hay funciones programadas.</td></tr>
@@ -26,3 +27,25 @@
     </tbody>
   </table>
 </div>
+
+<!-- cartel para eliminar: primero pregunta; si la base no deja, avisa en el mismo cartel -->
+@if (aEliminar(); as f) {
+  @if (errorEliminar()) {
+    <app-modal titulo="No se pudo eliminar" textoConfirmar="Cerrar" (confirmar)="cerrarCartel()">
+      <p>{{ errorEliminar() }}</p>
+    </app-modal>
+  } @else {
+    <app-modal titulo="Eliminar función"
+               [textoConfirmar]="eliminando() ? 'Eliminando...' : 'Eliminar'"
+               textoCancelar="Cancelar"
+               [ocupado]="eliminando()"
+               (confirmar)="confirmarEliminar()"
+               (cancelar)="cerrarCartel()">
+      <p>
+        ¿Eliminar la función de <strong>{{ f.peliculas.titulo }}</strong>
+        del {{ f.inicio | date: 'EEEE dd/MM HH:mm' }} en {{ f.salas.nombre }}?
+      </p>
+      
+    </app-modal>
+  }
+}

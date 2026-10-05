@@ -1,0 +1,21 @@
+
+<header class="admin__cabecera">
+  <h2>Precios de las entradas</h2>
+</header>
+
+<p class="nota">Es el precio que se sugiere al cargar funciones nuevas. Las funciones ya cargadas mantienen el suyo.</p>
+
+<div class="tarjeta precios">
+  @for (p of precios(); track p.formato) {
+    <label>{{ p.formato }}
+      <input type="number" min="1" [value]="p.precio" (input)="cambiar(p.formato, $event)">
+    </label>
+  }
+
+  @if (error()) { <p class="error">{{ error() }}</p> }
+  @if (mensaje()) { <p class="nota">{{ mensaje() }}</p> }
+
+  <button class="btn" (click)="guardar()" [disabled]="guardando()">
+    {{ guardando() ? 'Guardando...' : 'Guardar precios' }}
+  </button>
+</div>

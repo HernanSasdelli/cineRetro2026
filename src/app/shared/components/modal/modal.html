@@ -1,0 +1,20 @@
+<!-- fondo oscuro que tapa la pantalla, y la caja del cartel en el medio -->
+<div class="modal__fondo">
+  <div class="modal__caja" role="dialog" aria-modal="true">
+    <h2>{{ titulo() }}</h2>
+
+    <!-- aca entra lo que el padre ponga entre <app-modal> y </app-modal> -->
+    <div class="modal__contenido">
+      <ng-content />
+    </div>
+
+    <div class="modal__botones">
+      @if (textoCancelar()) {
+        <button type="button" class="btn btn--linea" [disabled]="ocupado()"
+                (click)="cancelar.emit()">{{ textoCancelar() }}</button>
+      }
+      <button type="button" class="btn" [disabled]="ocupado()"
+              (click)="confirmar.emit()">{{ textoConfirmar() }}</button>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import { Pedido } from '../models/compra';
+import { Pedido, Descuento} from '../models/compra';
 
 // todo lo de comprar entradas. es el unico que toca pedidos y entradas
 @Injectable({ providedIn: 'root' })
@@ -47,4 +47,13 @@ export class ComprasService {
     if (!data) throw new Error('No existe esa compra');
     return data;
   }
+    // que descuento le toca al usuario logueado. null = ninguno (o compra sin cuenta)
+  // es solo para MOSTRARLO: al comprar, la base lo vuelve a calcular y lo aplica
+  async miDescuento(): Promise<Descuento | null> {
+    const { data, error } = await this.sb.rpc('mi_descuento');
+    if (error) throw error;
+    return data;
+  }
+
+  
 }

@@ -1,0 +1,31 @@
+// fondo oscuro fijo sobre toda la pantalla
+.modal__fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+// la caja, con el estilo de ticket del cine
+.modal__caja {
+  width: 100%;
+  max-width: 460px;
+  max-height: 85vh;
+  overflow-y: auto;      // si la lista es larga, scrollea adentro
+  padding: 1.5rem;
+  background: #fffaf0;
+  border: 2px solid #2b1f1a;
+  box-shadow: 6px 6px 0 #2b1f1a;
+}
+
+.modal__contenido { margin: 1rem 0; }
+
+.modal__botones {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}

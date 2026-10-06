@@ -1,12 +1,30 @@
 <a class="ticket" [routerLink]="['/pelicula', pelicula().id]">
   <img class="ticket__poster" [src]="pelicula().imagen_url || '/posters/placeholder.svg'"
-       [alt]="'Póster de ' + pelicula().titulo" (error)="sinPoster($event)">
+    [alt]="'Póster de ' + pelicula().titulo" (error)="sinPoster($event)">
+
+
+
   <div class="ticket__cuerpo">
-    <h2>{{ pelicula().titulo | uppercase }}</h2><!-- aca se usa, como la directiva, en vez de llamar cada vez al if, esto lo usa todo el sistema -->
+    <h2>{{ pelicula().titulo | uppercase }}</h2>
+    <!-- aca se usa, como la directiva, en vez de llamar cada vez al if, esto lo usa todo el sistema -->
+    
     <p class="ticket__meta">
       {{ pelicula().duracion_min | duracion }}
       @if (pelicula().restriccion_edad) { <span class="edad">+{{ pelicula().restriccion_edad }}</span> }
     </p>
+
     <p class="ticket__generos">{{ generosTexto() }}</p>
+
+        @if (estado() === 'preventa') {
+      <p class="ticket__estreno"><span class="preventa">PREVENTA</span> Estreno {{ pelicula().fecha_estreno | date: 'EEE dd/MM' : 'UTC' }}</p>
+    }
+    @if (estado() === 'proximamente') {
+      <p class="ticket__estreno">Estreno {{ pelicula().fecha_estreno | date: 'EEE dd/MM' : 'UTC' }}</p>
+      @if (pelicula().tiene_preventa) {
+        <p class="ticket__estreno">Preventa desde {{ desdePreventa() | date: 'EEE dd/MM' : 'UTC' }}</p>
+      }
+    }
+    
+
   </div>
 </a>

@@ -25,7 +25,12 @@ export class PeliculasService {
     const { data, error } = await this.sb.from('peliculas').insert(peli).select('id').single();
     if (error) throw error;
 
-    const filas = generoIds.map(genero_id => ({ pelicula_id: data.id, genero_id }));
+    // const filas = generoIds.map(genero_id => ({ pelicula_id: data.id, genero_id }));
+    // una fila por cada genero
+    const filas = [];
+    for (const g of generoIds) {
+      filas.push({ pelicula_id: data.id, genero_id: g });
+    }
     const { error: e2 } = await this.sb.from('pelicula_genero').insert(filas);
     if (e2) throw e2;
   }
@@ -48,7 +53,10 @@ export class PeliculasService {
     const { error: e2 } = await this.sb.from('pelicula_genero').delete().eq('pelicula_id', id);
     if (e2) throw e2;
 
-    const filas = generoIds.map(genero_id => ({ pelicula_id: id, genero_id }));
+    const filas = [];
+    for (const g of generoIds) {
+      filas.push({ pelicula_id: id, genero_id: g });
+    }
     const { error: e3 } = await this.sb.from('pelicula_genero').insert(filas);
     if (e3) throw e3;
   }
@@ -64,5 +72,19 @@ export class PeliculasService {
     const { data, error } = await this.sb.rpc('mas_vendidas');
     if (error) throw error;
     return data;
+  }
+
+
+    // sube una imagen a la carpeta peliculas del storage y devuelve el link publico
+  // el nombre lleva la hora para que no se pise con otra ni quede la vieja guardada en el navegador
+  async subirImagen(imagen: Blob, tipo: 'poster' | 'banner'): Promise<string> {
+    const nombre = tipo + '-' + Date.now() + '.jpg';
+    const { error } = await this.sb.storage
+      .from('peliculas')
+      .upload(nombre, imagen, { contentType: 'image/jpeg' });
+    if (error) throw error;
+
+    const { data } = this.sb.storage.from('peliculas').getPublicUrl(nombre);
+    return data.publicUrl;
   }
 }

@@ -8,10 +8,18 @@ export interface Pelicula {
   titulo: string;
   sinopsis: string;
   duracion_min: number;
-  imagen_url: string | null;
+  imagen_url: string | null;    // poster vertical
+  banner_url: string | null;    // imagen horizontal para las mas vistas
   restriccion_edad: number; // 0, 13 o 18
   activa: boolean;
   generos: Genero[];
+  fecha_estreno: string | null;     // null es que ya esta estrenada
+  tiene_preventa: boolean;
+  precio_preventa: number | null;
+  
+ 
 }
 
 export type NuevaPelicula = Omit<Pelicula, 'id' | 'activa' | 'generos'>;
+
+

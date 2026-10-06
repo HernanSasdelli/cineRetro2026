@@ -88,6 +88,9 @@ src/app/
 - [ ] Validación de QR por empleados
 - [ ] Candy bar y combos
 - [ ] Cupones, puntos de fidelización y crédito por cancelación
+    - [x] Cupones 
+    - [] Puntos de fidelización
+    - [] Crédito por cancelación
 - [ ] Preventa, sección "Próximamente" y alertas
 - [ ] Reseñas y "Mis películas"
 - [ ] Reportes, exportación a PDF/Excel, gráficos y log de actividad

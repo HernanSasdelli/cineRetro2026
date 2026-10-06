@@ -19,3 +19,45 @@
   padding-bottom: 1.5rem;
   border-bottom: 2px dashed currentColor;
 }
+
+// filas de preventa y proximamente: de a 4, si hay mas se corre de costado
+.fila-pelis { margin-top: 2.5rem; }
+
+/*
+.fila-scroll {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 3rem) / 4);   // 4 tarjetas y 3 espacios de 1rem
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}*/
+
+
+
+// en el celu entran de a 2
+@media (max-width: 700px) {
+  .fila-scroll { grid-auto-columns: calc((100% - 1rem) / 2); }
+}
+
+
+
+// aviso de alerta cumplida, arriba de todo
+.aviso {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: #e07b2e;
+  color: #fff;
+}
+.aviso span { flex: 1; }
+.aviso__cerrar {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}

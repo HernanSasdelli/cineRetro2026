@@ -1,0 +1,30 @@
+//.fila { position: relative; }
+.carrusel { position: relative; }
+// 4 columnas iguales
+.fila__grilla {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+// flechas a mitad de alto, sobre el borde de las tarjetas
+.fila__flecha {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+.fila__flecha--izq { left: -0.75rem; }
+.fila__flecha--der { right: -0.75rem; }
+
+// en el celu de a 2 por renglon
+@media (max-width: 700px) {
+  .fila__grilla { grid-template-columns: repeat(2, 1fr); }
+}

@@ -61,4 +61,7 @@
 
 .resumen { margin-top: 1rem; }
 .resumen__total { font-weight: bold; font-size: 1.2rem; }
-.check { display: flex; gap: 0.5rem; align-items: center; }
+
+// checkbox con el texto al lado, no abajo
+.check { display: flex; flex-direction: row; gap: 0.5rem; align-items: center; }
+.check input { width: auto; }

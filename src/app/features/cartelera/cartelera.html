@@ -1,26 +1,37 @@
 <section class="cartelera">
+
+    @for (p of avisos(); track p.id) {
+    <div class="aviso">
+      <span>¡Ya salió a la venta <strong>{{ p.titulo }}</strong>!</span>
+      <a [routerLink]="['/pelicula', p.id]" class="btn">Ver funciones</a>
+      <button type="button" class="aviso__cerrar" (click)="cerrarAviso(p)" aria-label="Cerrar aviso">✕</button>
+    </div>
+  }
   
-    @if (destacadas().length > 0) {
+  @if (destacadas().length > 0) {
     <section class="destacadas">
       <h2>Las más vistas</h2>
-      <div class="grilla">
-        @for (p of destacadas(); track p.id) {
-          <app-tarjeta-pelicula [pelicula]="p" />
-        }
-      </div>
+      <app-slider-destacadas [peliculas]="destacadas()" />
     </section>
   }
+
+
   <header class="cartelera__cabecera">
     <h1>En cartelera</h1>
+
     <input type="search" class="buscador" placeholder="Buscar por título"
            aria-label="Buscar película" [value]="texto()" (input)="buscar($event)">
+
     <div class="chips" role="group" aria-label="Filtrar por género">
       <button class="chip" [class.activo]="generoId() === null" (click)="generoId.set(null)">Todos</button>
       @for (g of generos(); track g.id) {
         <button class="chip" [class.activo]="generoId() === g.id" (click)="generoId.set(g.id)">{{ g.nombre }}</button>
       }
     </div>
+
   </header>
+
+
 
   @if (cargando()) {
     <p class="nota">Cargando cartelera...</p>
@@ -28,12 +39,28 @@
     <p class="error">{{ error() }}</p>
   } @else {
     
+
+
 <div class="grilla">
-  @for (p of peliculas() | buscar: texto() : generoId(); track p.id) {
+  @for (p of enCartelera() | buscar: texto() : generoId(); track p.id) {
     <app-tarjeta-pelicula [pelicula]="p" /> 
   } @empty {
     <p class="nota">Ninguna película coincide. Probá con otro título o elegí "Todos".</p>
   }
 </div>
   }
+  @if (enPreventa().length > 0) {
+    <section class="fila-pelis">
+      <h2>Preventa</h2>
+      <app-fila-peliculas [peliculas]="enPreventa()" />
+    </section>
+  }
+
+  @if (proximamente().length > 0) {
+    <section class="fila-pelis">
+      <h2>Próximamente</h2>
+      <app-fila-peliculas [peliculas]="proximamente()" />
+    </section>
+  }
+
 </section>

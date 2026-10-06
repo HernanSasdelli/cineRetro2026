@@ -47,7 +47,7 @@
         @for (s of semanasOpciones; track s) {
           <button type="button" class="chip"
                   [class.activo]="form.controls.semanas.value === s"
-                  (click)="elegirSemanas(s)">{{ s === 1 ? 'Solo esta semana' : s + ' semanas' }}</button>
+                  (click)="elegirSemanas(s)">{{ s === 1 ? '1 semana' : s + ' semanas' }}</button>
         }
       </div>
     </fieldset>

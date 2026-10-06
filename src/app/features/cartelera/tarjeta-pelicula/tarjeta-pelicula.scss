@@ -59,3 +59,12 @@ a.ticket {
 
   &:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--tinta); }
 }
+
+.ticket__estreno { font-size: 0.8rem; margin: 0.25rem 0 0; }
+.preventa {
+  display: inline-block;
+  padding: 0 0.3rem;
+  background: #e07b2e;
+  color: #fff;
+  font-weight: bold;
+}

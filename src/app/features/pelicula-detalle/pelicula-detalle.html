@@ -1,46 +1,61 @@
 <a routerLink="/cartelera" class="volver">← Volver a la cartelera</a>
 
 @if (peli(); as p) {
-  <article class="detalle">
-    <img class="detalle__poster" [src]="p.imagen_url || '/posters/placeholder.svg'"
-         [alt]="'Póster de ' + p.titulo" (error)="sinPoster($event)">
+<article class="detalle">
+  <img class="detalle__poster" [src]="p.imagen_url || '/posters/placeholder.svg'" [alt]="'Póster de ' + p.titulo"
+    (error)="sinPoster($event)">
 
-    <div class="detalle__info">
-      <h1>{{ p.titulo }}</h1>
+  <div class="detalle__info">
+    <h1>{{ p.titulo }}</h1>
 
-      <p class="detalle__meta">
-        {{ p.duracion_min | duracion }}
-        @if (p.restriccion_edad) {
-          <span class="edad">+{{ p.restriccion_edad }}</span>
-        } @else {
-          <span class="edad edad--atp">ATP</span>
-        }
-      </p>
-
-      <div class="chips">
-        @for (g of p.generos; track g.id) {
-          <span class="chip">{{ g.nombre }}</span>
-        }
-      </div>
-
-      <p class="detalle__sinopsis">{{ p.sinopsis }}</p>
-
+    <p class="detalle__meta">
+      {{ p.duracion_min | duracion }}
       @if (p.restriccion_edad) {
-        <p class="aviso">Apta para mayores de {{ p.restriccion_edad }} años. Los menores deben asistir acompañados de un adulto.</p>
+      <span class="edad">+{{ p.restriccion_edad }}</span>
+      } @else {
+      <span class="edad edad--atp">ATP</span>
       }
-            <h2>Funciones</h2>
-      @for (f of funciones(); track f.id) {
-        <a class="chip" [routerLink]="['/compra', f.id]">
-          {{ f.inicio | date: 'EEE dd/MM HH:mm' }} · {{ f.salas.nombre }} ·
-          {{ f.formato }} {{ f.idioma | titlecase }}
-        </a>
-      } @empty {
-        <p class="nota">Por ahora no hay funciones programadas.</p>
+    </p>
+
+    <div class="chips">
+      @for (g of p.generos; track g.id) {
+      <span class="chip">{{ g.nombre }}</span>
       }
     </div>
-  </article>
+
+    <p class="detalle__sinopsis">{{ p.sinopsis }}</p>
+
+    @if (p.restriccion_edad) {
+    <p class="aviso">Apta para mayores de {{ p.restriccion_edad }} años. Los menores deben asistir acompañados de un
+      adulto.</p>
+    }
+    <h2>Funciones</h2>
+
+   
+    @if (estado() === 'proximamente') {
+      <p>Las entradas salen a la venta el <strong>{{ ventaDesde() | date: 'EEEE dd/MM' : 'UTC' }}</strong>.</p>
+    @if (auth.logueado()) {
+      <button type="button" class="btn" (click)="cambiarAlerta()">
+        {{ tieneAlerta() ? 'Quitar alerta' : 'Avisame cuando salga a la venta' }}
+      </button>
+    } @else {
+      <p class="nota"><a routerLink="/login">Iniciá sesión</a> para que te avisemos cuando salga a la venta.</p>
+      }
+    } @else {
+      @for (f of funciones(); track f.id) {
+      <a class="chip" [routerLink]="['/compra', f.id]">
+        {{ f.inicio | date: 'EEE dd/MM HH:mm' }} · {{ f.salas.nombre }} ·
+        {{ f.formato }} {{ f.idioma | titlecase }}
+      </a>
+    } @empty {
+      <p class="nota">Por ahora no hay funciones programadas.</p>
+    }
+    }
+
+  </div>
+</article>
 } @else if (error()) {
-  <p class="error">{{ error() }}</p>
+<p class="error">{{ error() }}</p>
 } @else {
-  <p class="nota">Cargando...</p>
+<p class="nota">Cargando...</p>
 }

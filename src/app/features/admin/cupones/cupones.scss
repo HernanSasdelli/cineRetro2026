@@ -1,0 +1,3 @@
+// checkbox con el texto al lado, no abajo
+.check { display: flex; flex-direction: row; gap: 0.5rem; align-items: center; }
+.check input { width: auto; }

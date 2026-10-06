@@ -1,0 +1,14 @@
+
+//---------POSTER Y BANNER----------------
+// las dos vistas previas, una al lado de la otra
+.fotos { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-start; }
+.foto { display: flex; flex-direction: column; gap: 0.4rem; }
+.foto__poster { width: 120px; height: 180px; object-fit: cover; border: 1px solid #2b1f1a; }
+.foto__banner { width: 320px; height: 120px; object-fit: cover; border: 1px solid #2b1f1a; }
+
+//.check { display: flex; gap: 0.5rem; align-items: center; }
+// checkbox con el texto al lado, no abajo
+.check { display: flex; flex-direction: row; gap: 0.5rem; align-items: center; }
+.check input { width: auto; }
+// campos bloqueados
+input:disabled { opacity: 0.5; cursor: not-allowed; }

@@ -1,0 +1,60 @@
+// la caja del banner, misma proporcion que la foto (1600 x 600)
+.slider { position: relative; }
+
+.slider__imagen {
+  display: block;
+  position: relative;
+  aspect-ratio: 8 / 3;
+  overflow: hidden;
+  border: 2px solid #2b1f1a;
+}
+.slider__imagen img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+// el titulo arriba de la foto, abajo a la izquierda
+.slider__titulo {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  padding: 0.3rem 0.6rem;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-weight: bold;
+}
+
+// flechas a los costados, centradas en alto
+.slider__flecha {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+.slider__flecha--izq { left: 0.5rem; }
+.slider__flecha--der { right: 0.5rem; }
+
+.slider__puntos {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+.slider__punto {
+  width: 0.7rem;
+  height: 0.7rem;
+  padding: 0;
+  border: 1px solid #2b1f1a;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+.slider__punto.activo { background: #e07b2e; }

@@ -350,6 +350,7 @@ export class FuncionForm implements OnInit, ConCambios {
     ///--------GUARDAR ATOMINZADO POR CARTEL----
 
   guardar() {
+    
     if (this.form.invalid) {
       this.form.markAllAsTouched();   // pinta en rojo lo que falta
       return;
@@ -389,8 +390,13 @@ export class FuncionForm implements OnInit, ConCambios {
           salaUsada = sala;
           creadas.push(this.textoFecha(d) + ' en ' + this.nombreSala(sala));
         }
-      } catch {
-        fallidas.push(this.textoFecha(d) + ': error al guardar');
+      } catch (e: any) {
+        // si la base dice que es antes del estreno, lo aviso con el motivo
+        if (e.message?.includes('estreno')) {
+          fallidas.push(this.textoFecha(d) + ': es antes del estreno (' + this.estrenoTexto() + ')');
+        } else {
+          fallidas.push(this.textoFecha(d) + ': error al guardar');
+        }
       }
     }
 
@@ -419,6 +425,17 @@ export class FuncionForm implements OnInit, ConCambios {
     const id = Number(this.form.value.pelicula_id);
     for (const p of this.peliculas()) {
       if (p.id === id) return p.titulo;
+    }
+    return '';
+  }
+
+    // fecha de estreno de la peli elegida, para el motivo del cartel
+  private estrenoTexto() {
+    const id = Number(this.form.value.pelicula_id);
+    for (const p of this.peliculas()) {
+      if (p.id === id && p.fecha_estreno) {
+        return this.textoFecha(new Date(p.fecha_estreno + 'T00:00'));
+      }
     }
     return '';
   }

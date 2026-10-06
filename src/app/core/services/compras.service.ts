@@ -62,5 +62,13 @@ export class ComprasService {
     return data;
   }
 
+
+    // busca por el codigo corto. solo el personal, si no la base devuelve vacio
+  async verPedidoCorto(corto: string): Promise<Pedido> {
+    const { data, error } = await this.sb.rpc('ver_pedido_corto', { p_corto: corto });
+    if (error) throw error;
+    if (!data) throw new Error('No existe esa compra');
+    return data;
+  }
   
 }

@@ -1,24 +1,37 @@
 <header class="header">
+
   <a routerLink="/cartelera" class="header__logo">Cine <span>Retro 2026</span></a>
 
   <nav class="header__nav">
+
     <a routerLink="/cartelera" routerLinkActive="activo">Cartelera</a>
 
     @if (auth.logueado()) {
+
       <a routerLink="/perfil" routerLinkActive="activo">{{ auth.perfil()?.nombre ?? 'Mi perfil' }}</a>
-    
-      @if (auth.rol() === 'empleado' || auth.rol() === 'admin') {
-        <a routerLink="/mis-peliculas" routerLinkActive="activo">Mis películas</a>}
 
-
-      <!-- solo visual, la seguridad es la RLS (meterse con f12 salteando el html)-->
-      @if (auth.rol() === 'admin') {
-        <a *appSoloAdmin routerLink="/admin" routerLinkActive="activo">Admin</a>
+      <!-- solo los clientes compran, solo ellos tienen peliculas -->
+      @if (auth.rol() === 'cliente') {
+        <a routerLink="/mis-peliculas" routerLinkActive="activo">Mis películas</a>
       }
+
+      <!-- el personal del cine valida las entradas -->
+      @if (auth.rol() === 'empleado' || auth.rol() === 'admin') {
+        <a routerLink="/validar" routerLinkActive="activo">Validar</a>
+      }
+
+      <!-- solo visual, la seguridad es la RLS (meterse con f12 salteando el html) -->
+      <a *appSoloAdmin routerLink="/admin" routerLinkActive="activo">Admin</a>
+
       <button class="btn btn--claro" (click)="salir()">Salir</button>
+
     } @else {
+
       <a routerLink="/login" routerLinkActive="activo">Ingresar</a>
       <a routerLink="/registro" class="btn btn--naranja">Registrarse</a>
-    }
+
+    } <!-- fin logueado -->
+
   </nav>
+
 </header>

@@ -12,6 +12,8 @@ export interface Pedido {
   descuento: number;   // porcentaje que se le desconto (0 = ninguno)
   restriccion_edad: number;   // 0 es ATP
   usada_en: string | null;   // null es que todavia no se uso
+  codigo_corto: string;   // el de 5 para tipear a mano
+  duracion_min: number;   // para saber cuando termina la funcion
 }
 
 // el cupon que le toca al usuario (funcion mi_descuento de la base)

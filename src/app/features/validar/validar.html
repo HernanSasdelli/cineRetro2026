@@ -4,7 +4,8 @@
 
   <div class="validar__buscar">
     <label>Código de la entrada
-      <input [value]="codigoEscrito()" (input)="escribirCodigo($event)" placeholder="Pegá o escribí el código">
+      <input [value]="codigoEscrito()" (input)="escribirCodigo($event)"
+        (keyup.enter)="buscar(codigoEscrito())" placeholder="Pegá, escribí o escaneá el código">
     </label>
     <button type="button" class="btn" (click)="buscar(codigoEscrito())">Buscar</button>
   </div>
@@ -31,11 +32,16 @@
           Esta entrada ya fue usada el {{ p.usada_en | date: 'EEE dd/MM' }} a las {{ p.usada_en | date: 'HH:mm' }}.
         </p>
 
-      } @else if (!esDeHoy()) {
+      } @else if (horario() === 'temprano') {
 
         <p class="validar__estado validar__estado--mal">
-          Esta entrada es para el {{ p.inicio | date: 'EEEE dd/MM' }}.
+          Todavía es temprano: la función empieza el {{ p.inicio | date: 'EEEE dd/MM' }} a las {{ p.inicio | date: 'HH:mm' }}.
+          Se puede entrar desde 15 minutos antes..
         </p>
+
+      } @else if (horario() === 'terminada') {
+
+        <p class="validar__estado validar__estado--mal">La función ya terminó.</p>
 
       } @else {
 
@@ -45,8 +51,11 @@
 
       } <!-- fin estado -->
 
-    </div>
 
+    </div>
+ <button type="button" class="btn btn--linea validar__otra" (click)="otraEntrada()">
+        Validar otra entrada
+      </button>
   } <!-- fin pedido -->
 
 </section>

@@ -1,0 +1,32 @@
+[debug] [2026-10-06T16:59:10.565Z] ----------------------------------------------------------------------
+[debug] [2026-10-06T16:59:10.569Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Hernan\AppData\Local\npm-cache\_npx\7750544ccf494d8b\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2026-10-06T16:59:10.570Z] CLI Version:   15.32.1
+[debug] [2026-10-06T16:59:10.570Z] Platform:      win32
+[debug] [2026-10-06T16:59:10.570Z] Node Version:  v24.19.0
+[debug] [2026-10-06T16:59:10.570Z] Detected Agent: unknown
+[debug] [2026-10-06T16:59:10.570Z] Time:          Tue Oct 06 2026 13:59:10 GMT-0300 (hora estándar de Argentina)
+[debug] [2026-10-06T16:59:10.570Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-10-06T16:59:32.509Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-10-06T16:59:32.509Z] > authorizing via signed-in user (her9192@gmail.com)
+[debug] [2026-10-06T16:59:32.509Z] [iam] checking project cineretro2026 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-10-06T16:59:32.520Z] Checked if tokens are valid: true, expires at: 1791309526284
+[debug] [2026-10-06T16:59:32.520Z] Checked if tokens are valid: true, expires at: 1791309526284
+[debug] [2026-10-06T16:59:32.521Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/cineretro2026:testIamPermissions [none]
+[debug] [2026-10-06T16:59:32.521Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/cineretro2026:testIamPermissions  x-goog-user-project=cineretro2026
+[debug] [2026-10-06T16:59:32.521Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/cineretro2026:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-10-06T16:59:33.558Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/cineretro2026:testIamPermissions 403
+[debug] [2026-10-06T16:59:33.558Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/cineretro2026:testIamPermissions {"error":{"code":403,"message":"Caller does not have required permission to use project cineretro2026. Grant the caller the roles/serviceusage.serviceUsageConsumer role, or a custom role with the serviceusage.services.use permission, by visiting https://console.developers.google.com/iam-admin/iam?project=cineretro2026 and then retry. Propagation of the new permission may take a few minutes.","status":"PERMISSION_DENIED","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"USER_PROJECT_DENIED","domain":"googleapis.com","metadata":{"consoleUrl":"https://console.developers.google.com/iam-admin/iam?project=cineretro2026","consumer":"projects/cineretro2026","containerInfo":"cineretro2026","service":"cloudresourcemanager.googleapis.com"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"Caller does not have required permission to use project cineretro2026. Grant the caller the roles/serviceusage.serviceUsageConsumer role, or a custom role with the serviceusage.services.use permission, by visiting https://console.developers.google.com/iam-admin/iam?project=cineretro2026 and then retry. Propagation of the new permission may take a few minutes."},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Google developer console IAM admin","url":"https://console.developers.google.com/iam-admin/iam?project=cineretro2026"}]}]}}
+[debug] [2026-10-06T16:59:33.559Z] [iam] error while checking permissions, command may fail: Request to https://cloudresourcemanager.googleapis.com/v1/projects/cineretro2026:testIamPermissions had HTTP Error: 403, Caller does not have required permission to use project cineretro2026. Grant the caller the roles/serviceusage.serviceUsageConsumer role, or a custom role with the serviceusage.services.use permission, by visiting https://console.developers.google.com/iam-admin/iam?project=cineretro2026 and then retry. Propagation of the new permission may take a few minutes.
+[debug] [2026-10-06T16:59:33.559Z] Checked if tokens are valid: true, expires at: 1791309526284
+[debug] [2026-10-06T16:59:33.560Z] Checked if tokens are valid: true, expires at: 1791309526284
+[debug] [2026-10-06T16:59:33.560Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/cineretro2026 [none]
+[debug] [2026-10-06T16:59:34.008Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/cineretro2026 403
+[debug] [2026-10-06T16:59:34.008Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/cineretro2026 {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2026-10-06T16:59:34.008Z] Request to https://firebase.googleapis.com/v1beta1/projects/cineretro2026 had HTTP Error: 403, The caller does not have permission
+[debug] [2026-10-06T16:59:34.009Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/cineretro2026 had HTTP Error: 403, The caller does not have permission
+    at responseToError (C:\Users\Hernan\AppData\Local\npm-cache\_npx\7750544ccf494d8b\node_modules\firebase-tools\lib\responseToError.js:53:12)
+    at RetryOperation._fn (C:\Users\Hernan\AppData\Local\npm-cache\_npx\7750544ccf494d8b\node_modules\firebase-tools\lib\apiv2.js:415:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+[error] 
+[error] Error: Failed to get Firebase project cineretro2026. Please make sure the project exists and your account has permission to access it.

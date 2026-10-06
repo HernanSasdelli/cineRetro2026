@@ -99,7 +99,8 @@
 
       } @else {
 
-        @if (auth.rol() === null || auth.rol() === 'cliente') {
+        <!-- al personal le aviso, al resto le muestro las funciones -->
+        @if (auth.rol() === 'empleado' || auth.rol() === 'admin') {
 
           <p class="nota">La compra de entradas es solo para clientes.</p>
 

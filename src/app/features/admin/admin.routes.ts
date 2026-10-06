@@ -18,6 +18,17 @@ export const ADMIN_ROUTES: Routes = [
         path: 'funciones',
         loadComponent: () => import('./funciones-lista/funciones-lista').then(m => m.FuncionesLista),
       },
+      {
+        // solo mira, no se toca nada desde aca
+        path: 'log',
+        loadComponent: () => import('./log/log').then(m => m.Log),
+      },          
+      
+      {
+        // solo mira, no hay form, por eso no lleva canDeactivate
+        path: 'reportes',
+        loadComponent: () => import('./reportes/reportes').then(m => m.Reportes),
+      },
       
       {
         // va antes que peliculas/:id, si no "nueva" se toma como un id

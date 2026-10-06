@@ -1,0 +1,96 @@
+<section class="reportes">
+
+  <div class="reportes__filtros">
+    <label>Desde <input type="date" [value]="desde()" (input)="escribirDesde($event)"></label>
+    <label>Hasta <input type="date" [value]="hasta()" (input)="escribirHasta($event)"></label>
+    <button type="button" class="btn" (click)="buscar()">Ver</button>
+  </div>
+
+  @if (error()) { <p class="error">{{ error() }}</p> }
+
+  @if (cargando()) {
+
+    <p class="nota">Cargando el reporte...</p>
+
+  } @else if (reporte(); as r) {
+
+    <div class="reportes__totales">
+      <p><strong>{{ r.total | currency: 'ARS' }}</strong> facturados</p>
+      <p><strong>{{ r.entradas }}</strong> entradas vendidas</p>
+    </div>
+
+    <div class="reportes__acciones">
+      <button type="button" class="btn btn--linea" (click)="descargar()">Descargar Excel</button>
+      <button type="button" class="btn btn--linea" (click)="imprimir()">Guardar PDF</button>
+    </div>
+
+    <!-- ===== POR DIA, con la barra al costado ===== -->
+    <h2>Por día</h2>
+    <div class="tabla-scroll">
+      <table class="tabla">
+        <thead>
+          <tr><th>Día</th><th>Entradas</th><th>Facturación</th><th>Gráfico</th></tr>
+        </thead>
+        <tbody>
+          @for (d of r.dias; track d.fecha) {
+            <tr>
+              <!-- 'UTC' porque sino en argentina muestra el dia anterior -->
+              <td>{{ d.fecha | date: 'dd/MM/yyyy' : 'UTC' }}</td>
+              <td>{{ d.entradas }}</td>
+              <td>{{ d.total | currency: 'ARS' }}</td>
+              <td class="barra-celda">
+                <div class="barra" [style.width.%]="ancho(d.total)"></div>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="4">No hubo ventas en esas fechas.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ===== RANKING DE PELICULAS ===== -->
+    <h2>Películas más vistas</h2>
+    <div class="tabla-scroll">
+      <table class="tabla">
+        <thead>
+          <tr><th>Película</th><th>Entradas</th><th>Facturación</th></tr>
+        </thead>
+        <tbody>
+          @for (p of r.peliculas; track p.titulo) {
+            <tr>
+              <td>{{ p.titulo }}</td>
+              <td>{{ p.entradas }}</td>
+              <td>{{ p.total | currency: 'ARS' }}</td>
+            </tr>
+          } @empty {
+            <tr><td colspan="3">Sin datos.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ===== RANKING DE CANDY ===== -->
+    <h2>Candy más vendido</h2>
+    <div class="tabla-scroll">
+      <table class="tabla">
+        <thead>
+          <tr><th>Producto</th><th>Cantidad</th><th>Facturación</th></tr>
+        </thead>
+        <tbody>
+          @for (c of r.candy; track c.nombre) {
+            <tr>
+              <td>{{ c.nombre }}</td>
+              <td>{{ c.cantidad }}</td>
+              <td>{{ c.total | currency: 'ARS' }}</td>
+            </tr>
+          } @empty {
+            <tr><td colspan="3">Sin datos.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+  } <!-- fin reporte -->
+
+</section>

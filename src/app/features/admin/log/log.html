@@ -1,0 +1,34 @@
+<section class="log">
+
+  @if (error()) { <p class="error">{{ error() }}</p> }
+
+  @if (cargando()) {
+
+    <p class="nota">Cargando el log...</p>
+
+  } @else {
+
+    <p class="nota">Últimos movimientos, el más nuevo arriba.</p>
+
+    <div class="tabla-scroll">
+      <table class="tabla">
+        <thead>
+          <tr><th>Cuándo</th><th>Quién</th><th>Qué hizo</th></tr>
+        </thead>
+        <tbody>
+          @for (l of lineas(); track l.id) {
+            <tr>
+              <td>{{ l.creado_en | date: 'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ l.quien }}</td>
+              <td>{{ l.accion }} {{ l.detalle }}</td>
+            </tr>
+          } @empty {
+            <tr><td colspan="3">Todavía no hay movimientos registrados.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+  } <!-- fin cargando -->
+
+</section>

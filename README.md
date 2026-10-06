@@ -12,6 +12,7 @@ Trabajo Práctico 1: Programación IV, UTN FRA, 2026.
 | Administrador | admin@cine.com | admin123 |
 | Cliente | cliente@cine.com | cliente123 |
 
+
 ## Stack
 
 - **Angular 21:** componentes standalone, signals, control flow (`@if`, `@for`, `@let`), formularios reactivos, lazy loading.
@@ -75,10 +76,11 @@ src/app/
 - [x] Rutas protegidas por sesión y por rol
 - [x] Cartelera con buscador y filtro por género
 - [x] ABM de películas (alta, edición y baja lógica)
+
 - [x] Mejorar el codigo y la explicacion que no convencia.
   - [x] Usar hijo - cartelera - tarjeta-pelicula
   - [x] usar seguridad en las tablas
-  - [x] usar una directica propia, (mostrar un texto en admin(mejorar!))
+  - [x] usar una directica propia, (mostrar un texto en admin)
 
 - [x] Funciones con asignación automática de sala y validación de horarios
     - [x] Validar el horario de 30 min de diferencia
@@ -89,10 +91,49 @@ src/app/
 - [x] Candy bar y combos
 - [-] Cupones, puntos de fidelización y crédito por cancelación
     - [x] Cupones 
-    - [X] Puntos de fidelización (falta canje)
+    - [X] Puntos de fidelización
+    - [ ] Canje de puntos
     - [X] Crédito por cancelación
 - [x] Preventa, sección "Próximamente" y alertas
 - [x] Reseñas y "Mis películas"
-- [ ] Reportes, exportación a PDF/Excel, gráficos y log de actividad
+- [x] Reportes, exportación a PDF/Excel, gráficos 
+- [x] Log de actividad
 
 Detalle de los requerimientos y las decisiones[REQUERIMIENTOS.md](REQUERIMIENTOS.md).
+
+## Mejoras pendientes
+
+Cosas que quedaron afuera por tiempo y se podrían agregar o mejorar:
+
+- Canje de puntos
+- Butacas en tiempo real
+- Dividir la pantalla de compra(atomizar codigo)
+- Manejo de errores repetido(atomizar codigo)
+- Paginación en las tablas del panel
+
+
+### Canje de puntos
+Los puntos se acumulan pero todavía no se pueden canjear. Haría una tabla
+`recompensas` con el costo en puntos, un botón Canjear en la registradora y
+una función en la base que descuente los puntos y cargue el beneficio, igual
+que `comprar`.
+
+### Butacas en tiempo real
+Las butacas vendidas se cargan al entrar a la pantalla. Si dos personas
+compran a la vez, la segunda se entera recién al confirmar, y la base la
+rechaza por la clave única. Con Supabase Realtime se podría escuchar la tabla
+de entradas y marcar la butaca en el momento.
+
+### Dividir la pantalla de compra
+`compra.ts` es el componente más grande: tiene el mapa de butacas, el candy y
+la registradora juntos. Se podría separar en componentes hijos y pasarles los
+datos con `input()` y `output()`, como ya hice con `tarjeta-producto`.
+
+### Manejo de errores repetido
+El `try / catch` con la señal de error está copiado en casi todas las
+pantallas. Se podría resolver en un solo lugar.
+
+### Paginación en las tablas del panel
+Las tablas traen todo. Con muchas películas o muchos pedidos conviene traer
+de a páginas.
+

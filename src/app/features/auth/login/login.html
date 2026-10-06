@@ -14,6 +14,7 @@
       Contraseña
       <input type="password" formControlName="password" autocomplete="current-password">
     </label>
+        <p><a routerLink="/recuperar">¿Olvidaste tu contraseña?</a></p>
     @if (form.controls.password.touched && form.controls.password.invalid) {
       <small class="error">Mínimo 6 caracteres</small>
     }

@@ -1,0 +1,29 @@
+<section class="tarjeta">
+  <h1>Nueva contraseña</h1>
+
+  @if (mensaje()) {
+    <p class="nota"><strong>{{ mensaje() }}</strong></p>
+    <p><a routerLink="/cartelera">Ir a la cartelera</a></p>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="guardar()">
+      <label>Nueva contraseña <input type="password" formControlName="password" autocomplete="new-password"></label>
+      @if (form.controls.password.touched && form.controls.password.invalid) {
+        <small class="error">Mínimo 6 caracteres</small>
+      }
+
+      <label>Repetir contraseña <input type="password" formControlName="password2" autocomplete="new-password"></label>
+      @if (form.controls.password2.touched && form.hasError('clavesDistintas')) {
+        <small class="error">Las contraseñas no coinciden</small>
+      }
+
+      @if (error()) {
+        <p class="error">{{ error() }}</p>
+        <p><a routerLink="/recuperar">Pedir otro link</a></p>
+      }
+
+      <button type="submit" class="btn" [disabled]="guardando()">
+        {{ guardando() ? 'Guardando...' : 'Guardar' }}
+      </button>
+    </form>
+  }
+</section>

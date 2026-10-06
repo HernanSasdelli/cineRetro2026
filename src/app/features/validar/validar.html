@@ -1,0 +1,52 @@
+<section class="validar">
+
+  <h1>Validar entradas</h1>
+
+  <div class="validar__buscar">
+    <label>Código de la entrada
+      <input [value]="codigoEscrito()" (input)="escribirCodigo($event)" placeholder="Pegá o escribí el código">
+    </label>
+    <button type="button" class="btn" (click)="buscar(codigoEscrito())">Buscar</button>
+  </div>
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  @if (pedido(); as p) {
+
+    <div class="tarjeta validar__entrada">
+
+      <h2>{{ p.pelicula }}</h2>
+      <p>{{ p.inicio | date: 'EEEE dd/MM · HH:mm' }} h · {{ p.sala }}</p>
+      <p><strong>Butacas:</strong> {{ p.butacas.join(', ') }}</p>
+
+      @if (mensaje()) {
+
+        <p class="validar__estado validar__estado--bien">{{ mensaje() }}</p>
+
+      } @else if (p.usada_en) {
+
+        <p class="validar__estado validar__estado--mal">
+          Esta entrada ya fue usada el {{ p.usada_en | date: 'EEE dd/MM' }} a las {{ p.usada_en | date: 'HH:mm' }}.
+        </p>
+
+      } @else if (!esDeHoy()) {
+
+        <p class="validar__estado validar__estado--mal">
+          Esta entrada es para el {{ p.inicio | date: 'EEEE dd/MM' }}.
+        </p>
+
+      } @else {
+
+        <button type="button" class="btn validar__pasar" [disabled]="validando()" (click)="dejarPasar()">
+          {{ validando() ? 'Validando...' : 'Dejar pasar' }}
+        </button>
+
+      } <!-- fin estado -->
+
+    </div>
+
+  } <!-- fin pedido -->
+
+</section>

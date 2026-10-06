@@ -17,6 +17,10 @@
     @if (form.controls.password.touched && form.controls.password.invalid) {
       <small class="error">Mínimo 6 caracteres</small>
     }
+        <label>Repetir contraseña <input type="password" formControlName="password2" autocomplete="new-password"></label>
+    @if (form.controls.password2.touched && form.hasError('clavesDistintas')) {
+      <small class="error">Las contraseñas no coinciden</small>
+    }
 
     <fieldset formGroupName="nacimiento">
       <legend>Fecha de nacimiento</legend>

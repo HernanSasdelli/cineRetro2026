@@ -3,6 +3,8 @@ import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Va
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
+import { clavesIguales } from '../../../shared/validators/claves';
+
 function fechaValida(g: AbstractControl): ValidationErrors | null {
   const { dia, mes, anio } = g.value;
   if (!dia || !mes || !anio) return null; // de eso se encarga required
@@ -37,6 +39,7 @@ export class Registro {
     apellido: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
+    password2: ['', Validators.required],
     nacimiento: this.fb.group(
       {
         dia: [null as number | null, [Validators.required, Validators.min(1), Validators.max(31)]],
@@ -48,7 +51,7 @@ export class Registro {
     tipo_sangre: [''], // opcional, es dato sensible
     color_ojos: ['', Validators.required],
     dias_vacaciones: [0, [Validators.required, Validators.min(0), Validators.max(365)]],
-  });
+  }, { validators: clavesIguales });;
 
   get nac() {
     return this.form.controls.nacimiento;
@@ -68,7 +71,7 @@ export class Registro {
     this.enviando.set(true);
     this.error.set('');
 
-    const { nacimiento, ...resto } = this.form.getRawValue();
+    const { nacimiento, password2, ...resto } = this.form.getRawValue();
     const dos = (n: number | null) => String(n).padStart(2, '0');
     const fecha_nacimiento = `${nacimiento.anio}-${dos(nacimiento.mes)}-${dos(nacimiento.dia)}`;
 

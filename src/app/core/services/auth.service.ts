@@ -62,4 +62,18 @@ export class AuthService {
   async logout() {
     await this.sb.auth.signOut();
   }
+
+    // manda el mail con el link para cambiar la contraseña
+  async recuperar(email: string) {
+    const { error } = await this.sb.auth.resetPasswordForEmail(email, {
+      redirectTo: location.origin + '/nueva-clave',
+    });
+    if (error) throw error;
+  }
+
+  // cambia la contraseña del usuario que entro por el link del mail
+  async cambiarClave(clave: string) {
+    const { error } = await this.sb.auth.updateUser({ password: clave });
+    if (error) throw error;
+  }
 }

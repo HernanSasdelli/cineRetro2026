@@ -55,5 +55,12 @@ export class ComprasService {
     return data;
   }
 
+    // valida la entrada en la puerta. la base revisa todo: que sea personal, que no este usada, que sea de hoy
+  async validar(codigo: string): Promise<Pedido> {
+    const { data, error } = await this.sb.rpc('validar_entrada', { p_codigo: codigo });
+    if (error) throw error;
+    return data;
+  }
+
   
 }

@@ -18,6 +18,12 @@
     <p><strong>Total:</strong> {{ p.total | currency: 'ARS' }}</p>
     @if (p.descuento > 0) { <p>Descuento aplicado: {{ p.descuento }}%</p> }
 
+
+    <!-- Ataja la entrada ya usada -->
+        @if (p.usada_en) {
+      <p class="entrada__usada">USADA</p>
+    }
+
     <img class="entrada__qr" [src]="qr()" alt="Código QR de la entrada">
     <p class="entrada__nota">Mostrá este código en la entrada de la sala.</p>
   </section>

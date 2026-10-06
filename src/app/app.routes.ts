@@ -55,7 +55,30 @@ export const routes: Routes = [
     canDeactivate: [cambiosGuard],
     loadComponent: () => import('./features/mis-peliculas/mis-peliculas').then(m => m.MisPeliculas),
   },
+    {
+    // personal del cine: empleados y admin. a mano o desde el QR
+    path: 'validar',
+    canMatch: [authGuard, rolGuard],
+    data: { roles: ['empleado', 'admin'] },
+    loadComponent: () => import('./features/validar/validar').then(m => m.Validar),
+  },
+  {
+    path: 'validar/:codigo',
+    canMatch: [authGuard, rolGuard],
+    data: { roles: ['empleado', 'admin'] },
+    loadComponent: () => import('./features/validar/validar').then(m => m.Validar),
+  },
 
-  
+    {
+    path: 'recuperar',
+    loadComponent: () => import('./features/auth/recuperar/recuperar').then(m => m.Recuperar),
+  },
+  {
+    // llega desde el link del mail
+    path: 'nueva-clave',
+    loadComponent: () => import('./features/auth/nueva-clave/nueva-clave').then(m => m.NuevaClave),
+  },
+
+
   { path: '**', redirectTo: 'cartelera' },
 ];

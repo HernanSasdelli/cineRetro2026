@@ -1,0 +1,18 @@
+
+<section class="tarjeta">
+  <h1>Recuperar contraseña</h1>
+
+  @if (mensaje()) {
+    <p class="nota"><strong>{{ mensaje() }}</strong></p>
+  } @else {
+    <label>Tu mail
+      <input type="email" [value]="email()" (input)="escribirEmail($event)" (keyup.enter)="enviar()">
+    </label>
+    @if (error()) { <p class="error">{{ error() }}</p> }
+    <button type="button" class="btn" [disabled]="enviando()" (click)="enviar()">
+      {{ enviando() ? 'Enviando...' : 'Mandarme el link' }}
+    </button>
+  }
+
+  <p><a routerLink="/login">Volver a ingresar</a></p>
+</section>

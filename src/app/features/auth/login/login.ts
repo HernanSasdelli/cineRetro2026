@@ -35,9 +35,18 @@ export class Login {
     this.enviando.set(true);
     this.error.set('');
     try {
-      const { email, password } = this.form.getRawValue();
-      await this.auth.login(email, password);
-      this.router.navigate([this.auth.rol() === 'admin' ? '/admin' : '/cartelera']);
+        const { email, password } = this.form.getRawValue();
+        await this.auth.login(email, password);
+
+        // cada rol va a su pantalla
+        if (this.auth.rol() === 'admin') {
+          this.router.navigate(['/admin']);
+        } else if (this.auth.rol() === 'empleado') {
+          this.router.navigate(['/validar']);
+        } else {
+          this.router.navigate(['/cartelera']);
+        }
+
     } catch (e: any) {
       console.error('error login', e);
       this.error.set('No se pudo ingresar: ' + e?.message);

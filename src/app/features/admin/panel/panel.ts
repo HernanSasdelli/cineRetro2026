@@ -26,10 +26,8 @@ export class Panel implements OnInit {
   async cambiarVisible(p: Pelicula) {
     try {
       await this.pelisService.cambiarVisible(p.id, !p.activa);
-      // actualizo la lista local sin volver a pedir todo
-      this.peliculas.update(lista =>
-        lista.map(x => (x.id === p.id ? { ...x, activa: !x.activa } : x)),
-      );
+      // vuelvo a pedir la lista, es una consulta mas pero se entiende mejor
+      this.peliculas.set(await this.pelisService.listar(false));
     } catch {
       this.error.set('No se pudo cambiar la visibilidad.');
     }

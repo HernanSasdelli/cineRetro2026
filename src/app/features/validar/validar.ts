@@ -68,7 +68,7 @@ export class Validar implements OnInit {
   //   return new Date(p.inicio).toDateString() === new Date().toDateString();
   // }
 
-  // se puede entrar desde 1 hora antes hasta que termina la peli
+  // se puede entrar desde 15 minutos antes hasta que termina la peli
   // temprano, terminada u ok. lo que decide es la base, esto es para mostrar el motivo
   horario() {
     const p = this.pedido();

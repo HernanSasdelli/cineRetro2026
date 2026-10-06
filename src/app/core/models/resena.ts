@@ -24,4 +24,5 @@ export interface MiPelicula {
   estrellas: number | null;    // null es que todavia no la puntuo
   comentario: string | null;
   total: number;   // para el cartel de cancelar
+  cancelada_en: string | null;   // null es que no se cancelo
 }

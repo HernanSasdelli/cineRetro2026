@@ -99,9 +99,9 @@
 
       } @else {
 
-        @if (auth.rol() === 'admin') {
+        @if (auth.rol() === null || auth.rol() === 'cliente') {
 
-          <p class="nota">Las cuentas de administrador no pueden comprar entradas.</p>
+          <p class="nota">La compra de entradas es solo para clientes.</p>
 
         } @else {
 

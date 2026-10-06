@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { cambiosGuard } from './core/guards/cambios.guard';
 import { rolGuard } from './core/guards/rol.guard';
+import { compraGuard } from './core/guards/compra.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'cartelera', pathMatch: 'full' },
@@ -33,10 +34,12 @@ export const routes: Routes = [
     data: { roles: ['admin'] },
     loadChildren: () => import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES),
   },
-    {
+  {
     // comprar NO pide login: se puede comprar sin cuenta con el mail
+    // compraGuard: compran el anonimo y el cliente, el personal no
     // canDeactivate: si eligio butacas y se va sin comprar, pregunta
     path: 'compra/:funcionId',
+    canActivate: [compraGuard],
     canDeactivate: [cambiosGuard],
     loadComponent: () => import('./features/compra/compra').then(m => m.Compra),
   },

@@ -73,6 +73,10 @@
 
             <p class="validar__estado validar__estado--bien">{{ mensajeCandy() }}</p>
 
+                    } @else if (p.cancelada_en) {
+
+            <p class="validar__estado validar__estado--mal">Esta compra fue cancelada.</p>
+
           } @else if (p.candy_entregado_en) {
 
             <p class="validar__estado validar__estado--mal">

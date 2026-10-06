@@ -11,6 +11,7 @@ import { Modal } from '../../shared/components/modal/modal';
 // mis peliculas: arriba las que voy a ver, abajo las que ya vi
 // desde las ya vistas se puntua, una sola vez
 // las proximas se pueden cancelar hasta 2 horas antes, vuelve todo como credito
+// las canceladas van en su propia lista, no se puntuan
 @Component({
   selector: 'app-mis-peliculas',
   imports: [DatePipe, CurrencyPipe, RouterLink, EstrellasPipe, Modal],
@@ -46,22 +47,31 @@ export class MisPeliculas implements OnInit, ConCambios {
     }
   }
 
-  // las que todavia no empezaron
+  // las que todavia no empezaron. las canceladas no van, no voy a ir
   proximas() {
     const ahora = new Date();
     const res: MiPelicula[] = [];
     for (const m of this.lista()) {
-      if (new Date(m.inicio) > ahora) res.push(m);
+      if (!m.cancelada_en && new Date(m.inicio) > ahora) res.push(m);
     }
     return res;
   }
 
-  // las que ya empezaron
+  // las que ya empezaron. las canceladas no van, no la vi asi que no la puedo puntuar
   vistas() {
     const ahora = new Date();
     const res: MiPelicula[] = [];
     for (const m of this.lista()) {
-      if (new Date(m.inicio) <= ahora) res.push(m);
+      if (!m.cancelada_en && new Date(m.inicio) <= ahora) res.push(m);
+    }
+    return res;
+  }
+
+  // las que cancele, van aparte
+  canceladas() {
+    const res: MiPelicula[] = [];
+    for (const m of this.lista()) {
+      if (m.cancelada_en) res.push(m);
     }
     return res;
   }

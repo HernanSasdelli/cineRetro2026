@@ -89,8 +89,8 @@ src/app/
 - [x] Candy bar y combos
 - [-] Cupones, puntos de fidelización y crédito por cancelación
     - [x] Cupones 
-    - [X] Puntos de fidelización
-    - [] Crédito por cancelación
+    - [X] Puntos de fidelización (falta canje)
+    - [X] Crédito por cancelación
 - [x] Preventa, sección "Próximamente" y alertas
 - [x] Reseñas y "Mis películas"
 - [ ] Reportes, exportación a PDF/Excel, gráficos y log de actividad

@@ -55,6 +55,23 @@
   } @empty {
     <p class="nota">Todavía no viste ninguna película con nosotros.</p>
   }
+    @if (canceladas().length > 0) {
+    <h2>Canceladas</h2>
+    @for (m of canceladas(); track m.codigo) {
+      <div class="mi-peli mi-peli--cancelada">
+        <img [src]="m.imagen_url || '/posters/placeholder.svg'" [alt]="m.titulo">
+        <div>
+          <h3>{{ m.titulo }}</h3>
+          <p>{{ m.inicio | date: 'EEEE dd/MM HH:mm' }} · {{ m.sala }}</p>
+          <p class="mis__cancelada">
+            Cancelada el {{ m.cancelada_en | date: 'dd/MM/yyyy' }}. Se te acreditaron
+            {{ m.total | currency: 'ARS' }}.
+          </p>
+          <a class="btn btn--linea" [routerLink]="['/entrada', m.codigo]">Ver entrada</a>
+        </div>
+      </div>
+    }
+  } <!-- fin canceladas -->
 </section>
 
 <!-- cartel de cancelar -->

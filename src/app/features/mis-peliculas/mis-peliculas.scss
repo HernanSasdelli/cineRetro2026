@@ -18,3 +18,17 @@
   padding: 0 0.1rem;
 }
 .estrella.activa { color: #e07b2e; }
+
+/* la compra cancelada se ve apagada */
+.mi-peli--cancelada {
+  opacity: 0.65;
+
+  img {
+    filter: grayscale(1);
+  }
+}
+
+.mis__cancelada {
+  color: #9b2226;
+  font-weight: 600;
+}

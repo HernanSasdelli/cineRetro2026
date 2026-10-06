@@ -77,10 +77,11 @@ export class PeliculasService {
 
     // sube una imagen a la carpeta peliculas del storage y devuelve el link publico
   // el nombre lleva la hora para que no se pise con otra ni quede la vieja guardada en el navegador
-  async subirImagen(imagen: Blob, tipo: 'poster' | 'banner'): Promise<string> {
+   async subirImagen(imagen: Blob, tipo: 'poster' | 'banner' | 'producto'): Promise<string> {
     const nombre = tipo + '-' + Date.now() + '.jpg';
     const { error } = await this.sb.storage
       .from('peliculas')
+      
       .upload(nombre, imagen, { contentType: 'image/jpeg' });
     if (error) throw error;
 

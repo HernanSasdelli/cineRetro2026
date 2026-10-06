@@ -86,8 +86,8 @@ src/app/
 - [x] Mapa de butacas en tiempo real (comunes, accesibles y VIP)
 - [x] Compra, PDF y código QR- 
 - [x] Validación de QR y codigo por empleados (solucion a tener que usar el celu)
-- [ ] Candy bar y combos
-- [ ] Cupones, puntos de fidelización y crédito por cancelación
+- [x] Candy bar y combos
+- [-] Cupones, puntos de fidelización y crédito por cancelación
     - [x] Cupones 
     - [] Puntos de fidelización
     - [] Crédito por cancelación

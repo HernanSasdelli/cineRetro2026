@@ -1,0 +1,15 @@
+<div class="carrusel">
+  @if (hayMas()) {
+    <button type="button" class="fila__flecha fila__flecha--izq" (click)="anterior()">‹</button>
+  }
+
+  <div class="fila__grilla">
+    @for (p of visibles(); track p.id) {
+      <app-tarjeta-producto [producto]="p" [conBotones]="false" />
+    }
+  </div>
+
+  @if (hayMas()) {
+    <button type="button" class="fila__flecha fila__flecha--der" (click)="siguiente()">›</button>
+  }
+</div>

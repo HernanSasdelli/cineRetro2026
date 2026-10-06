@@ -1,3 +1,11 @@
+// un item del candy de una compra
+export interface ItemPedido {
+  nombre: string;
+  tipo: 'producto' | 'combo';
+  cantidad: number;
+}
+
+
 // una compra como la devuelve la base (funcion ver_pedido)
 export interface Pedido {
   codigo: string;      // el que va en el QR
@@ -14,6 +22,8 @@ export interface Pedido {
   usada_en: string | null;   // null es que todavia no se uso
   codigo_corto: string;   // el de 5 para tipear a mano
   duracion_min: number;   // para saber cuando termina la funcion
+  candy_entregado_en: string | null;   // null es que todavia no lo retiro
+  items: ItemPedido[];   // el candy, vacio si no compro
 }
 
 // el cupon que le toca al usuario (funcion mi_descuento de la base)

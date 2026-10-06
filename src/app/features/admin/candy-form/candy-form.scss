@@ -1,0 +1,5 @@
+.candy-form { max-width: 560px; margin: 0 auto; }
+.candy-form__fotos { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-start; }
+.candy-form__foto { display: flex; flex-direction: column; gap: 0.4rem; }
+.candy-form__vista-foto { width: 120px; height: 120px; object-fit: cover; border: 1px solid #2b1f1a; }
+.candy-form__vista-banner { width: 320px; height: 120px; object-fit: cover; border: 1px solid #2b1f1a; }

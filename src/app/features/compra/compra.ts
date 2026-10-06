@@ -7,6 +7,9 @@ import { ComprasService } from '../../core/services/compras.service';
 import { FuncionConDatos } from '../../core/models/funcion';
 import { Descuento } from '../../core/models/compra';   // NUEVO cupon
 import { ConCambios } from '../../core/guards/cambios.guard';
+import { CandyService } from '../../core/services/candy.service';
+import { Categoria, Producto } from '../../core/models/candy';
+import { TarjetaProducto } from '../../shared/components/tarjeta-producto/tarjeta-producto';
 
 // PANTALLA DE COMPRA
 // que necesito: la funcion (peli, sala, hora, precio) y las butacas ya vendidas
@@ -15,7 +18,7 @@ import { ConCambios } from '../../core/guards/cambios.guard';
 // no pide login: se puede comprar sin cuenta dejando el mail
 @Component({
   selector: 'app-compra',
-  imports: [CurrencyPipe, DatePipe, TitleCasePipe, RouterLink],
+  imports: [CurrencyPipe, DatePipe, TitleCasePipe, RouterLink, TarjetaProducto],
   templateUrl: './compra.html',
   styleUrl: './compra.scss',
 })
@@ -25,6 +28,13 @@ export class Compra implements OnInit, ConCambios {
   protected auth = inject(AuthService);   // protected: el html pregunta si esta logueado
   private funcionesService = inject(FuncionesService);
   private comprasService = inject(ComprasService);
+  private candyService = inject(CandyService);
+
+  productos = signal<Producto[]>([]);
+
+  // lo que eligio del candy: el producto y cuantos
+  candyElegido = signal<{ producto: Producto; cantidad: number }[]>([]);
+  categorias: Categoria[] = ['Pochoclos', 'Bebidas', 'Golosinas'];
 
   // el id viene en la url: /compra/7. snapshot porque no cambia estando aca
   private funcionId = Number(this.route.snapshot.paramMap.get('funcionId'));
@@ -69,6 +79,8 @@ export class Compra implements OnInit, ConCambios {
       await this.auth.listo;
       this.funcion.set(await this.funcionesService.obtener(this.funcionId));
       this.ocupadas.set(await this.comprasService.ocupadas(this.funcionId));
+      this.productos.set(await this.candyService.activos());
+
       // si esta logueado uso su mail y busco si le toca algun cupon
       // sin cuenta: escribe el mail y no tiene cupon
       const usuario = this.auth.usuario();
@@ -126,6 +138,114 @@ export class Compra implements OnInit, ConCambios {
     }
     this.error.set('');
     this.elegidas.set(nueva);
+        // si saco todas las butacas, se va el candy. si quedan menos butacas que combos, saco los combos
+    if (nueva.length === 0) {
+      this.candyElegido.set([]);
+    } else if (this.combosElegidos() > nueva.length) {
+      this.sacarCombos();
+      this.error.set('Cada combo incluye una entrada: volvé a elegir los combos.');
+    }
+  }
+
+    // ---------- CANDY ----------
+
+  combos() {
+    const lista: Producto[] = [];
+    for (const p of this.productos()) {
+      if (p.tipo === 'combo') lista.push(p);
+    }
+    return lista;
+  }
+
+  productosDe(cat: Categoria) {
+    const lista: Producto[] = [];
+    for (const p of this.productos()) {
+      if (p.tipo === 'producto' && p.categoria === cat) lista.push(p);
+    }
+    return lista;
+  }
+
+  // cuantos lleva de ese producto
+  cantidadDe(p: Producto) {
+    for (const x of this.candyElegido()) {
+      if (x.producto.id === p.id) return x.cantidad;
+    }
+    return 0;
+  }
+
+  // total de combos elegidos (cada uno usa una butaca)
+  combosElegidos() {
+    let n = 0;
+    for (const x of this.candyElegido()) {
+      if (x.producto.tipo === 'combo') n += x.cantidad;
+    }
+    return n;
+  }
+
+  // un combo mas solo si quedan butacas sin combo
+  puedeSumar(p: Producto) {
+    if (p.tipo === 'combo') return this.combosElegidos() < this.elegidas().length;
+    return true;
+  }
+
+  // arma la lista nueva con la cantidad cambiada, si queda en 0 lo saco
+  private cambiarCantidad(p: Producto, cuanto: number) {
+    const nueva: { producto: Producto; cantidad: number }[] = [];
+    let estaba = false;
+    for (const x of this.candyElegido()) {
+      if (x.producto.id === p.id) {
+        estaba = true;
+        if (x.cantidad + cuanto > 0) nueva.push({ producto: x.producto, cantidad: x.cantidad + cuanto });
+      } else {
+        nueva.push(x);
+      }
+    }
+    if (!estaba && cuanto > 0) nueva.push({ producto: p, cantidad: cuanto });
+    this.candyElegido.set(nueva);
+  }
+
+  sumar(p: Producto) {
+    if (!this.puedeSumar(p)) return;
+    this.error.set('');
+    this.cambiarCantidad(p, 1);
+  }
+
+  restar(p: Producto) {
+    this.cambiarCantidad(p, -1);
+  }
+
+  private sacarCombos() {
+    const nueva: { producto: Producto; cantidad: number }[] = [];
+    for (const x of this.candyElegido()) {
+      if (x.producto.tipo !== 'combo') nueva.push(x);
+    }
+    this.candyElegido.set(nueva);
+  }
+
+  // ---------- CUENTA (solo para mostrar, la de verdad la hace la base) ----------
+
+  // entradas sin las que van dentro de un combo
+  entradasSueltas() {
+    return this.total() - this.entradasEnCombos();
+  }
+
+    // lo que se descuenta por las entradas que van dentro de los combos (precio comun de la funcion sin el vop)
+  entradasEnCombos() {
+    return this.combosElegidos() * (this.funcion()?.precio ?? 0);
+  }
+
+  // el cupon solo se aplica a las entradas sueltas
+  descuentoMonto() {
+    const porcentaje = this.descuento()?.porcentaje ?? 0;
+    return this.entradasSueltas() * porcentaje / 100;
+  }
+
+  totalCandy() {
+    let suma = 0;
+    for (const x of this.candyElegido()) {
+      suma += x.producto.precio * x.cantidad;
+    }
+    return suma;
   }
 
   // precio de una butaca, SOLO para mostrar. b[0] = la letra de la fila
@@ -143,10 +263,18 @@ export class Compra implements OnInit, ConCambios {
     return suma;
   }
 
+  /*
   // NUEVO cupon: total con el descuento aplicado (solo para mostrar, la base calcula el real)
   totalFinal() {
     const porcentaje = this.descuento()?.porcentaje ?? 0;
     return this.total() * (100 - porcentaje) / 100;
+  }*/
+
+
+    //BARDO
+   // entradas sueltas - cupon + combos + candy
+  totalFinal() {
+    return this.entradasSueltas() - this.descuentoMonto() + this.totalCandy();
   }
 
   // EDAD
@@ -211,7 +339,13 @@ export class Compra implements OnInit, ConCambios {
     this.error.set('');
     this.comprando.set(true);
     try {
-      const codigo = await this.comprasService.comprar(this.funcionId, this.elegidas(), this.email());
+
+      // del candy mando solo que productos y cuantos, el precio lo pone la base
+      const items: { id: number; cantidad: number }[] = [];
+      for (const x of this.candyElegido()) {
+        items.push({ id: x.producto.id, cantidad: x.cantidad });
+      }
+      const codigo = await this.comprasService.comprar(this.funcionId, this.elegidas(), this.email(), items);
       this.comprado = true;
       this.router.navigate(['/entrada', codigo]);
     } catch (e: any) {

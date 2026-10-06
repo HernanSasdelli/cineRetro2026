@@ -1,21 +1,38 @@
-@if (peliculas()[actual()]; as p) {
-  <div class="slider">
-    <a class="slider__imagen" [routerLink]="['/pelicula', p.id]">
-      <img [src]="p.banner_url || '/banner-placeholder.svg'" [alt]="p.titulo" (error)="sinBanner($event)">
-      <span class="slider__titulo">{{ p.titulo | uppercase }}</span>
-    </a>
+@if (items()[actual()]; as d) {
 
-    @if (peliculas().length > 1) {
+  <div class="slider">
+
+    @if (d.link) {
+
+      <!-- pelicula: toda la imagen lleva al detalle -->
+      <a class="slider__imagen" [routerLink]="d.link">
+        <img [src]="d.imagen || '/banner-placeholder.svg'" [alt]="d.titulo" (error)="sinBanner($event)">
+        <span class="slider__titulo">{{ d.titulo | uppercase }}</span>
+      </a>
+
+    } @else {
+
+      <!-- combo: no lleva a ningun lado, se compra con la entrada -->
+      <div class="slider__imagen">
+        <img [src]="d.imagen || '/banner-placeholder.svg'" [alt]="d.titulo" (error)="sinBanner($event)">
+        <span class="slider__titulo">{{ d.titulo | uppercase }} · CON TU ENTRADA</span>
+      </div>
+
+    } <!-- fin link -->
+
+    @if (items().length > 1) {
       <button type="button" class="slider__flecha slider__flecha--izq" (click)="anterior()">‹</button>
       <button type="button" class="slider__flecha slider__flecha--der" (click)="siguiente()">›</button>
     }
+
   </div>
 
-  @if (peliculas().length > 1) {
+  @if (items().length > 1) {
     <div class="slider__puntos">
       @for (i of indices(); track i) {
         <button type="button" class="slider__punto" [class.activo]="i === actual()" (click)="ir(i)"></button>
       }
     </div>
   }
-}
+
+} <!-- fin item -->

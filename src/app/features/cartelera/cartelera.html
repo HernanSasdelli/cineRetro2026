@@ -1,20 +1,27 @@
 <section class="cartelera">
 
-    @for (p of avisos(); track p.id) {
+  <!-- ===== AVISOS DE ALERTAS ===== -->
+
+  @for (p of avisos(); track p.id) {
     <div class="aviso">
       <span>¡Ya salió a la venta <strong>{{ p.titulo }}</strong>!</span>
       <a [routerLink]="['/pelicula', p.id]" class="btn">Ver funciones</a>
       <button type="button" class="aviso__cerrar" (click)="cerrarAviso(p)" aria-label="Cerrar aviso">✕</button>
     </div>
-  }
-  
-  @if (destacadas().length > 0) {
-    <section class="destacadas">
-      <h2>Las más vistas</h2>
-      <app-slider-destacadas [peliculas]="destacadas()" />
-    </section>
-  }
+  } <!-- fin avisos -->
 
+
+  <!-- ===== LO MAS PEDIDO: pelis y combos ===== -->
+
+  @if (destacadosSlider().length > 0) {
+    <section class="destacadas">
+      <h2>Lo más pedido</h2>
+      <app-slider-destacadas [items]="destacadosSlider()" />
+    </section>
+  } <!-- fin lo mas pedido -->
+
+
+  <!-- ===== EN CARTELERA ===== -->
 
   <header class="cartelera__cabecera">
     <h1>En cartelera</h1>
@@ -28,27 +35,31 @@
         <button class="chip" [class.activo]="generoId() === g.id" (click)="generoId.set(g.id)">{{ g.nombre }}</button>
       }
     </div>
-
   </header>
 
-
-
   @if (cargando()) {
+
     <p class="nota">Cargando cartelera...</p>
+
   } @else if (error()) {
+
     <p class="error">{{ error() }}</p>
+
   } @else {
-    
+
+    <div class="grilla">
+      @for (p of enCartelera() | buscar: texto() : generoId(); track p.id) {
+        <app-tarjeta-pelicula [pelicula]="p" />
+      } @empty {
+        <p class="nota">Ninguna película coincide. Probá con otro título o elegí "Todos".</p>
+      }
+    </div>
+
+  } <!-- fin cartelera -->
 
 
-<div class="grilla">
-  @for (p of enCartelera() | buscar: texto() : generoId(); track p.id) {
-    <app-tarjeta-pelicula [pelicula]="p" /> 
-  } @empty {
-    <p class="nota">Ninguna película coincide. Probá con otro título o elegí "Todos".</p>
-  }
-</div>
-  }
+  <!-- ===== PREVENTA ===== -->
+
   @if (enPreventa().length > 0) {
     <section class="fila-pelis">
       <h2>Preventa</h2>
@@ -56,11 +67,25 @@
     </section>
   }
 
+
+  <!-- ===== PROXIMAMENTE ===== -->
+
   @if (proximamente().length > 0) {
     <section class="fila-pelis">
       <h2>Próximamente</h2>
       <app-fila-peliculas [peliculas]="proximamente()" />
     </section>
   }
+
+
+  <!-- ===== CANDY: se muestra, se compra con la entrada ===== -->
+
+  @if (productosCandy().length > 0) {
+    <section class="fila-pelis">
+      <h2>Candy</h2>
+      <p class="nota">Vas a poder disfrutar estos combos con la compra de tu entrada.</p>
+      <app-fila-productos [productos]="productosCandy()" />
+    </section>
+  } <!-- fin candy -->
 
 </section>

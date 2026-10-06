@@ -1,0 +1,27 @@
+:host { display: block; }
+
+.prod {
+  height: 100%;
+  background: #fffaf0;
+  border: 2px solid #2b1f1a;
+  box-shadow: 4px 4px 0 #2b1f1a;
+}
+// la elegida se marca en naranja
+.prod--elegido { border-color: #e07b2e; box-shadow: 4px 4px 0 #e07b2e; }
+
+.prod__foto { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
+.prod__cuerpo { padding: 0.6rem; }
+.prod__cuerpo h4 { margin: 0 0 0.2rem; font-size: 0.95rem; }
+.prod__desc { margin: 0; font-size: 0.75rem; }
+.prod__precio { margin: 0.3rem 0; font-weight: bold; }
+
+.prod__cantidad { display: flex; align-items: center; gap: 0.6rem; }
+.prod__cantidad button {
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid #2b1f1a;
+  background: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.prod__cantidad button:disabled { opacity: 0.4; cursor: not-allowed; }

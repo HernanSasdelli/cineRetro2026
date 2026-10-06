@@ -23,6 +23,7 @@ export class Validar implements OnInit {
   error = signal('');
   mensaje = signal('');
   validando = signal(false);
+  mensajeCandy = signal('');
 
   // si vino desde el QR, el codigo esta en la url
   async ngOnInit() {
@@ -45,6 +46,7 @@ export class Validar implements OnInit {
   async buscar(codigo: string) {
     this.error.set('');
     this.mensaje.set('');
+    this.mensajeCandy.set('');
     this.pedido.set(null);
     try {
       const texto = this.limpiarCodigo(codigo);
@@ -103,6 +105,25 @@ export class Validar implements OnInit {
     this.codigoEscrito.set('');
     this.error.set('');
     this.mensaje.set('');
+
+    this.mensajeCandy.set('');
     this.router.navigate(['/validar']);
+    
+  }
+
+    // entregar el candy en el mostrador, va aparte de la entrada
+  async entregarCandy() {
+    const p = this.pedido();
+    if (!p) return;
+    this.validando.set(true);
+    this.error.set('');
+    try {
+      this.pedido.set(await this.comprasService.entregarCandy(p.codigo));
+      this.mensajeCandy.set('Candy entregado.');
+    } catch (e: any) {
+      this.error.set(e.message ?? 'No se pudo entregar el candy.');
+    } finally {
+      this.validando.set(false);
+    }
   }
 }

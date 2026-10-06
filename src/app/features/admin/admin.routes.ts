@@ -47,6 +47,22 @@ export const ADMIN_ROUTES: Routes = [
         canDeactivate: [cambiosGuard],
         loadComponent: () => import('./cupones/cupones').then(m => m.Cupones),
       },
+            {
+        path: 'candy',
+        canDeactivate: [cambiosGuard],
+        loadComponent: () => import('./candy/candy').then(m => m.Candy),
+      },
+
+            {
+        path: 'cupones/nuevo',
+        canDeactivate: [cambiosGuard],
+        loadComponent: () => import('./cupon-form/cupon-form').then(m => m.CuponForm),
+      },
+      {
+        path: 'candy/nuevo',
+        canDeactivate: [cambiosGuard],
+        loadComponent: () => import('./candy-form/candy-form').then(m => m.CandyForm),
+      },
     ],
   },
 ];

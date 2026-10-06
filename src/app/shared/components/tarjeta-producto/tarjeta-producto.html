@@ -1,0 +1,23 @@
+<div class="prod" [class.prod--elegido]="cantidad() > 0">
+
+  <img class="prod__foto" [src]="producto().imagen_url" [alt]="producto().nombre">
+
+  <div class="prod__cuerpo">
+    <h4>{{ producto().nombre }}</h4>
+
+    @if (producto().descripcion) {
+      <p class="prod__desc">{{ producto().descripcion }}</p>
+    }
+
+    <p class="prod__precio">{{ producto().precio | currency: 'ARS' }}</p>
+
+    @if (conBotones()) {
+      <div class="prod__cantidad">
+        <button type="button" (click)="restar.emit()" [disabled]="cantidad() === 0">–</button>
+        <span>{{ cantidad() }}</span>
+        <button type="button" (click)="sumar.emit()" [disabled]="!puedeSumar()">+</button>
+      </div>
+    }
+  </div>
+
+</div>

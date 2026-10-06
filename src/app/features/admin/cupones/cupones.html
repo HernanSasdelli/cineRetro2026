@@ -1,5 +1,6 @@
 <header class="admin__cabecera">
   <h2>Cupones de descuento</h2>
+  <a routerLink="/admin/cupones/nuevo" class="btn">Nuevo cupón</a>
 </header>
 
 <p class="nota">Se aplican solos a los usuarios registrados que cumplen la condición. Si le tocan dos, se usa el de mayor porcentaje.</p>
@@ -36,31 +37,3 @@
   </table>
 </div>
 
-<form class="tarjeta nuevo" [formGroup]="form" (ngSubmit)="crear()">
-  <h3>Nuevo cupón</h3>
-
-  <label>Nombre <input formControlName="nombre"></label>
-  @if (form.controls.nombre.touched && form.controls.nombre.invalid) {
-    <small class="error">Poné un nombre</small>
-  }
-
-  <label>Porcentaje <input type="number" formControlName="porcentaje" min="1" max="100"></label>
-  @if (form.controls.porcentaje.touched && form.controls.porcentaje.invalid) {
-    <small class="error">Tiene que ser entre 1 y 100</small>
-  }
-
-  <label class="check">
-    <input type="checkbox" formControlName="solo_primera_compra"> Solo en la primera compra
-  </label>
-
-  <label>Edad mínima, dejalo vacío para cualquier edad
-    <input type="number" formControlName="edad_minima" min="1">
-  </label>
-  @if (form.controls.edad_minima.invalid) {
-    <small class="error">Edad no válida</small>
-  }
-
-  <div class="acciones">
-    <button type="submit" class="btn">Crear cupón</button>
-  </div>
-</form>

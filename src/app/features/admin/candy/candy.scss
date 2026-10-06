@@ -1,0 +1,6 @@
+.candy__mini { width: 48px; height: 48px; object-fit: cover; border: 1px solid #2b1f1a; }
+.candy__precio { width: 6rem; }
+
+// los dos botones uno al lado del otro, sin que bajen de renglon
+.candy__acciones { display: flex; gap: 0.4rem; flex-wrap: nowrap; }
+.candy__acciones .btn { white-space: nowrap; }

@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { CuponesService } from '../../../core/services/cupones.service';
 import { Cupon } from '../../../core/models/compra';
 import { ConCambios } from '../../../core/guards/cambios.guard';
@@ -10,12 +10,12 @@ import { ConCambios } from '../../../core/guards/cambios.guard';
 // el descuento lo aplica la base sola al comprar, aca solo se configura
 @Component({
   selector: 'app-cupones',
-  imports: [ReactiveFormsModule],
+  imports: [RouterLink],
   templateUrl: './cupones.html',
   styleUrl: './cupones.scss',
 })
 export class Cupones implements OnInit, ConCambios {
-  private fb = inject(FormBuilder);
+  //private fb = inject(FormBuilder); al form
   private cuponesService = inject(CuponesService);
 
   cupones = signal<Cupon[]>([]);
@@ -23,12 +23,12 @@ export class Cupones implements OnInit, ConCambios {
   mensaje = signal('');
   private cambiado = false;   // escribio un porcentaje en la tabla y no lo guardo
 
-  form = this.fb.group({
+  /*form = this.fb.group({ al form
     nombre: ['', Validators.required],
     porcentaje: [10, [Validators.required, Validators.min(1), Validators.max(100)]],
     solo_primera_compra: [false],
     edad_minima: [null as number | null, [Validators.min(1), Validators.max(120)]],
-  });
+  });*/
 
   async ngOnInit() {
     await this.cargar();
@@ -45,7 +45,8 @@ export class Cupones implements OnInit, ConCambios {
 
   // lo pregunta el cambiosGuard al salir
   tieneCambios() {
-    return this.cambiado || this.form.dirty;
+    //return this.cambiado || this.form.dirty; ya no ahy form aca
+      return this.cambiado;
   }
 
   // texto de a quien le toca el cupon
@@ -88,26 +89,5 @@ export class Cupones implements OnInit, ConCambios {
     }
   }
 
-  async crear() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-    this.error.set('');
-    const v = this.form.value;
-    try {
-      await this.cuponesService.crear({
-        nombre: v.nombre ?? '',
-        porcentaje: Number(v.porcentaje),
-        solo_primera_compra: v.solo_primera_compra ?? false,
-        edad_minima: v.edad_minima ? Number(v.edad_minima) : null,
-      });
-      // vacio el form y queda sin cambios para el guard
-      this.form.reset({ nombre: '', porcentaje: 10, solo_primera_compra: false, edad_minima: null });
-      this.mensaje.set('Cupón creado.');
-      await this.cargar();
-    } catch {
-      this.error.set('No se pudo crear el cupón. Probá de nuevo.');
-    }
-  }
+
 }

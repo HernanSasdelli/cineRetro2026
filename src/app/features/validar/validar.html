@@ -52,6 +52,44 @@
       } <!-- fin estado -->
 
 
+
+            <!-- ===== CANDY, se valida aparte ===== -->
+
+      @if (p.items.length > 0) {
+
+        <div class="validar__candy">
+          <h3>Candy</h3>
+          <ul>
+            @for (it of p.items; track it.nombre) {
+              <li>{{ it.cantidad }} × {{ it.nombre }}</li>
+            }
+          </ul>
+
+          @if (mensajeCandy()) {
+
+            <p class="validar__estado validar__estado--bien">{{ mensajeCandy() }}</p>
+
+          } @else if (p.candy_entregado_en) {
+
+            <p class="validar__estado validar__estado--mal">
+              El candy ya fue entregado a las {{ p.candy_entregado_en | date: 'HH:mm' }}.
+            </p>
+
+          } @else if (horario() !== 'ok') {
+
+            <p class="validar__estado validar__estado--mal">Todavía no se puede retirar el candy.</p>
+
+          } @else {
+
+            <button type="button" class="btn validar__pasar" [disabled]="validando()" (click)="entregarCandy()">
+              Entregar candy
+            </button>
+
+          } <!-- fin estado candy -->
+        </div>
+
+      } <!-- fin candy -->
+
     </div>
  <button type="button" class="btn btn--linea validar__otra" (click)="otraEntrada()">
         Validar otra entrada

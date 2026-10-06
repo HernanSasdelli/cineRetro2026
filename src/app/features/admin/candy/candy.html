@@ -1,0 +1,79 @@
+<header class="admin__cabecera">
+  <h2>Candy</h2>
+  <a routerLink="/admin/candy/nuevo" class="btn">Nuevo producto</a>
+</header>
+
+@if (error()) { <p class="error">{{ error() }}</p> }
+
+
+<!-- ===== LISTA ===== -->
+
+<div class="tabla-scroll">
+  <table class="tabla">
+    <thead>
+      <tr><th></th><th>Nombre</th><th>Tipo</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+      @for (p of productos(); track p.id) {
+        <tr [class.oculta]="!p.activo">
+          <td><img class="candy__mini" [src]="p.imagen_url" [alt]="p.nombre"></td>
+          <td>
+            <strong>{{ p.nombre }}</strong>
+            @if (p.descripcion) { <br><small>{{ p.descripcion }}</small> }
+          </td>
+          <td>{{ tipoTexto(p) }}</td>
+          <td>
+            <input type="number" class="candy__precio" min="1"
+                   [value]="p.precio" (input)="escribirPrecio(p, $event)">
+          </td>
+          <td>{{ p.activo ? 'Activo' : 'Inactivo' }}</td>
+          <td>
+            <div class="candy__acciones">
+              <button type="button" class="btn btn--linea" (click)="pedirPrecio(p)">Guardar</button>
+              <button type="button" class="btn btn--linea" (click)="pedirActivo(p)">
+                {{ p.activo ? 'Desactivar' : 'Activar' }}
+              </button>
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr><td colspan="6">Todavía no hay productos.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ===== CARTEL DE CONFIRMAR ===== -->
+
+@if (elegido(); as p) {
+
+  @if (errorCartel()) {
+
+    <app-modal titulo="No se pudo guardar" textoConfirmar="Cerrar" (confirmar)="cerrarCartel()">
+      <p>{{ errorCartel() }}</p>
+    </app-modal>
+
+  } @else {
+
+    <app-modal [titulo]="accion() === 'precio' ? 'Cambiar precio' : (p.activo ? 'Desactivar' : 'Activar')"
+               [textoConfirmar]="trabajando() ? 'Guardando...' : 'Confirmar'"
+               textoCancelar="Cancelar"
+               [ocupado]="trabajando()"
+               (confirmar)="confirmar()"
+               (cancelar)="cerrarCartel()">
+
+      @if (accion() === 'precio') {
+        <p>¿Seguro que querés cambiar el precio de <strong>{{ p.nombre }}</strong> a <strong>{{ p.precio | currency: 'ARS' }}</strong>?</p>
+      } @else {
+        <p>¿Seguro que querés {{ p.activo ? 'desactivar' : 'activar' }} <strong>{{ p.nombre }}</strong>?</p>
+        @if (p.activo) {
+          <p class="nota">No se va a poder comprar hasta que lo vuelvas a activar.</p>
+        }
+      }
+
+    </app-modal>
+
+  } <!-- fin error -->
+
+} <!-- fin cartel -->

@@ -29,11 +29,25 @@ export class ComprasService {
   // la base calcula el precio (VIP +50%) y crea pedido + entradas todo junto o nada, al reces que el de crear funcion
   // si una butaca ya estaba vendida tira error 23505 y no se crea ninguna
   // devuelve el codigo del pedido, que es lo que va en el QR
-  async comprar(funcionId: number, butacas: string[], email: string): Promise<string> {
+  /*async comprar(funcionId: number, butacas: string[], email: string): Promise<string> {
     const { data, error } = await this.sb.rpc('comprar', {
       p_funcion_id: funcionId,
       p_butacas: butacas,
       p_email: email,
+    });
+    if (error) throw error;
+    return data;
+  }*/
+
+    //--COMPRA NUEVA CON CANDY AGREGADO
+      // compra: la base calcula todo. el candy va como [{ id, cantidad }], el precio lo pone la base
+  async comprar(funcionId: number, butacas: string[], email: string,
+                items: { id: number; cantidad: number }[]): Promise<string> {
+    const { data, error } = await this.sb.rpc('comprar', {
+      p_funcion_id: funcionId,
+      p_butacas: butacas,
+      p_email: email,
+      p_items: items,
     });
     if (error) throw error;
     return data;
@@ -68,6 +82,12 @@ export class ComprasService {
     const { data, error } = await this.sb.rpc('ver_pedido_corto', { p_corto: corto });
     if (error) throw error;
     if (!data) throw new Error('No existe esa compra');
+    return data;
+  }
+    // entrega el candy en el mostrador. la base revisa todo, igual que validar
+  async entregarCandy(codigo: string): Promise<Pedido> {
+    const { data, error } = await this.sb.rpc('entregar_candy', { p_codigo: codigo });
+    if (error) throw error;
     return data;
   }
   

@@ -1,10 +1,10 @@
 import { Component, OnDestroy, input, signal } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Pelicula } from '../../../core/models/pelicula';
+import { Destacado } from '../../../core/models/destacado';
 
-// slider de las mas vistas: muestra el banner de a una y pasa sola cada 5 segundos
-// las pelis me las pasa la cartelera
+// slider de lo mas pedido: muestra el banner de a uno y pasa solo cada 5 segundos
+// pelis y combos, me los pasa la cartelera. las pelis llevan al detalle, los combos no
 @Component({
   selector: 'app-slider-destacadas',
   imports: [UpperCasePipe, RouterLink],
@@ -12,7 +12,7 @@ import { Pelicula } from '../../../core/models/pelicula';
   styleUrl: './slider-destacadas.scss',
 })
 export class SliderDestacadas implements OnDestroy {
-  peliculas = input.required<Pelicula[]>();
+  items = input.required<Destacado[]>();
   actual = signal(0);   // cual se esta mostrando
 
   // cada 5 segundos pasa a la siguiente
@@ -25,14 +25,14 @@ export class SliderDestacadas implements OnDestroy {
 
   // el % hace que despues de la ultima vuelva a la primera
   siguiente() {
-    const total = this.peliculas().length;
+    const total = this.items().length;
     if (total === 0) return;
     this.actual.set((this.actual() + 1) % total);
   }
 
   // sumo total antes del % para que antes de la primera vaya a la ultima
   anterior() {
-    const total = this.peliculas().length;
+    const total = this.items().length;
     if (total === 0) return;
     this.actual.set((this.actual() - 1 + total) % total);
   }
@@ -41,10 +41,10 @@ export class SliderDestacadas implements OnDestroy {
     this.actual.set(i);
   }
 
-  // 0, 1, 2 para dibujar un puntito por peli
+  // 0, 1, 2 para dibujar un puntito por cada uno
   indices() {
     const lista: number[] = [];
-    for (let i = 0; i < this.peliculas().length; i++) {
+    for (let i = 0; i < this.items().length; i++) {
       lista.push(i);
     }
     return lista;
@@ -54,4 +54,5 @@ export class SliderDestacadas implements OnDestroy {
   sinBanner(e: Event) {
     (e.target as HTMLImageElement).src = '/banner-placeholder.svg';
   }
+
 }

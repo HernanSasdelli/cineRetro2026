@@ -1,7 +1,7 @@
 <a routerLink="/cartelera" class="volver">← Volver a la cartelera</a>
 
 @if (funcion(); as f) {
-  <section class="compra">
+  <section class="compra" [class.compra--abierta]="elegidas().length > 0">
     <header>
       <h1>{{ f.peliculas.titulo }}</h1>
       <p>{{ f.inicio | date: 'EEEE dd/MM HH:mm' }} · {{ f.salas.nombre }} · {{ f.formato }} {{ f.idioma | titlecase }}</p>
@@ -41,22 +41,86 @@
       <li><span class="butaca accesible"></span>Accesible</li>
     </ul>
 
-    <div class="tarjeta resumen">
-      <h2>Tu compra</h2>
-      @for (b of elegidas(); track b) {
-        <p>Butaca {{ b }} @if (esVip(b[0])) { <strong>VIP</strong> } · {{ precioDe(b) | currency: 'ARS' }}</p>
-      } @empty {
-        <p class="nota">Tocá las butacas que desees.</p>
-      }
-      <!-- <p class="resumen__total">Total: {{ total() | currency: 'ARS' }}</p>-->
-        @if (descuento(); as d) {
-        <p>Subtotal: {{ total() | currency: 'ARS' }}</p>
-        <p><strong>{{ d.nombre }}: -{{ d.porcentaje }}%</strong></p>
-      }
-      <p class="resumen__total">Total: {{ totalFinal() | currency: 'ARS' }}</p>
+    <!-- ===== CANDY: aparece recien cuando eligio alguna butaca ===== -->
 
+    @if (elegidas().length > 0 && productos().length > 0) {
+
+      <section class="candy-compra">
+        <h2>Mejorá tu experiencia con el candy</h2>
+
+        @if (combos().length > 0) {
+          <h3>Combos <small>· cada uno incluye una entrada</small></h3>
+          <div class="candy-grilla">
+            @for (p of combos(); track p.id) {
+              <app-tarjeta-producto [producto]="p" [cantidad]="cantidadDe(p)" [puedeSumar]="puedeSumar(p)"
+                                    (sumar)="sumar(p)" (restar)="restar(p)" />
+            }
+          </div>
+        }
+
+        @for (cat of categorias; track cat) {
+          @if (productosDe(cat).length > 0) {
+            <h3>{{ cat }}</h3>
+            <div class="candy-grilla">
+              @for (p of productosDe(cat); track p.id) {
+                <app-tarjeta-producto [producto]="p" [cantidad]="cantidadDe(p)"
+                                      (sumar)="sumar(p)" (restar)="restar(p)" />
+              }
+            </div>
+          }
+        } <!-- fin categorias -->
+      </section>
+
+    } <!-- fin candy -->
+
+
+    <!-- ===== REGISTRADORA: entra de la derecha cuando hay algo elegido ===== -->
+
+    <aside class="registradora" [class.registradora--abierta]="elegidas().length > 0">
+
+      <h2>Tu compra</h2>
+
+      <!-- entradas -->
+      @for (b of elegidas(); track b) {
+        <p class="reg__linea">
+          <span>Butaca {{ b }} @if (esVip(b[0])) { <strong>VIP</strong> }</span>
+          <span>{{ precioDe(b) | currency: 'ARS' }}</span>
+        </p>
+      }
+
+      @if (combosElegidos() > 0) {
+        <p class="reg__linea reg__linea--desc">
+          <span>{{ combosElegidos() }} {{ combosElegidos() === 1 ? 'entrada incluida' : 'entradas incluidas' }} en combos</span>
+          <span>-{{ entradasEnCombos() | currency: 'ARS' }}</span>
+        </p>
+      }
+
+      <!-- cupon, solo a entradas sueltas -->
+      @if (descuento(); as d) {
+        @if (descuentoMonto() > 0) {
+          <p class="reg__linea reg__linea--desc">
+            <span>{{ d.nombre }} (-{{ d.porcentaje }}%)</span>
+            <span>-{{ descuentoMonto() | currency: 'ARS' }}</span>
+          </p>
+        }
+      }
+
+      <!-- candy -->
+      @for (x of candyElegido(); track x.producto.id) {
+        <p class="reg__linea">
+          <span>{{ x.cantidad }} × {{ x.producto.nombre }}</span>
+          <span>{{ x.producto.precio * x.cantidad | currency: 'ARS' }}</span>
+        </p>
+      }
+
+      <p class="reg__total">
+        <span>Total</span>
+        <span>{{ totalFinal() | currency: 'ARS' }}</span>
+      </p>
+
+      <!-- mail y edad -->
       @if (auth.logueado()) {
-        <p>La entrada va a {{ email() }}</p>
+        <p class="reg__nota">La entrada va a {{ email() }}</p>
       } @else {
         <label>Tu mail, para identificar tu compra
           <input type="email" [value]="email()" (input)="escribirEmail($event)">
@@ -72,10 +136,14 @@
 
       @if (error()) { <p class="error">{{ error() }}</p> }
 
-      <button class="btn" (click)="comprar()" [disabled]="comprando()">
+      <button class="btn reg__comprar" (click)="comprar()" [disabled]="comprando()">
         {{ comprando() ? 'Comprando...' : 'Comprar' }}
       </button>
-    </div>
+
+    </aside>
+
+
+
   </section>
 } @else if (error()) {
   <p class="error">{{ error() }}</p>

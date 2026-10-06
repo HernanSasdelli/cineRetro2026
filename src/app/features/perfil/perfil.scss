@@ -7,3 +7,14 @@
   dt { font-weight: 600; color: var(--gris); }
   dd { margin: 0; }
 }
+.perfil__saldos { display: flex; gap: 2rem; margin-top: 1rem; }
+.perfil__numero { font-size: 1.6rem; font-weight: bold; margin: 0; }
+.perfil__mov {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px dashed #2b1f1a;
+  font-size: 0.9rem;
+}
+.perfil__mov--resta { color: #9e2b25; }

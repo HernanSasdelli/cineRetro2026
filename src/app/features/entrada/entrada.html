@@ -1,13 +1,21 @@
 <!-- <p>entrada works!</p> -->
 @if (pedido(); as p) {
+
   <section class="entrada">
+
     <p class="entrada__cine">CINE RETRO · ENTRADA</p>
     <h1>{{ p.pelicula | uppercase }}</h1>
     <p>{{ p.inicio | date: 'EEEE dd/MM/yyyy · HH:mm' }} h</p>
     <p>{{ p.sala }} · {{ p.formato }} {{ p.idioma | titlecase }}</p>
-    <p><strong>Butacas:</strong> {{ p.butacas.join(', ') }}</p>
 
-        @if (p.items.length > 0) {
+    @if (!p.cancelada_en) {
+      <p><strong>Butacas:</strong> {{ p.butacas.join(', ') }}</p>
+    }
+
+
+    <!-- ===== CANDY ===== -->
+
+    @if (p.items.length > 0) {
       <div class="entrada__candy">
         <p><strong>Candy:</strong></p>
         <ul class="entrada__items">
@@ -19,36 +27,62 @@
           <p class="entrada__usada entrada__usada--chico">CANDY ENTREGADO</p>
         }
       </div>
-    }
-    
+    } <!-- fin candy -->
+
+
+    <!-- ===== AVISO DE EDAD ===== -->
+
     @if (p.restriccion_edad > 0) {
       <p class="entrada__aviso">
         <strong>Película para mayores de {{ p.restriccion_edad }} años.</strong>
         Debe asistir un adulto. Se puede pedir documento en el ingreso.
       </p>
-    }
+    } <!-- fin aviso -->
 
-    
+
+    <!-- ===== TOTAL ===== -->
+
     <p><strong>Total:</strong> {{ p.total | currency: 'ARS' }}</p>
     @if (p.descuento > 0) { <p>Descuento aplicado: {{ p.descuento }}%</p> }
+    @if (p.credito_usado > 0) { <p>Pagado con crédito: {{ p.credito_usado | currency: 'ARS' }}</p> }
 
 
-    <!-- Ataja la entrada ya usada -->
-        @if (p.usada_en) {
-      <p class="entrada__usada">USADA</p>
-    }
+    <!-- ===== QR O CANCELADA ===== -->
 
-    <img class="entrada__qr" [src]="qr()" alt="Código QR de la entrada">
-    <p class="entrada__codigo">Código: <strong>{{ p.codigo_corto }}</strong></p>
-        <p class="entrada__nota">Mostrá este código en la entrada de la sala y en el candy.</p>
+    @if (p.cancelada_en) {
+
+      <p class="entrada__usada">CANCELADA</p>
+      <p class="entrada__nota">Esta compra se canceló y su valor se acreditó en tu cuenta.</p>
+
+    } @else {
+
+      <!-- Ataja la entrada ya usada -->
+      @if (p.usada_en) {
+        <p class="entrada__usada">USADA</p>
+      }
+
+      <img class="entrada__qr" [src]="qr()" alt="Código QR de la entrada">
+      <p class="entrada__codigo">Código: <strong>{{ p.codigo_corto }}</strong></p>
+      <p class="entrada__nota">Mostrá este código en la entrada de la sala y en el candy.</p>
+
+    } <!-- fin cancelada -->
+
   </section>
 
+
   <div class="acciones no-imprimir">
-    <button class="btn" (click)="imprimir()">Descargar PDF</button>
+    @if (!p.cancelada_en) {
+      <button class="btn" (click)="imprimir()">Descargar PDF</button>
+    }
     <a routerLink="/cartelera" class="btn btn--linea">Volver a la cartelera</a>
   </div>
+
 } @else if (error()) {
+
   <p class="error">{{ error() }}</p>
+
 } @else {
+
   <p class="nota">Cargando tu entrada...</p>
-}
+
+} <!-- fin pedido -->

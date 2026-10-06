@@ -31,6 +31,8 @@ export class Compra implements OnInit, ConCambios {
   private candyService = inject(CandyService);
 
   productos = signal<Producto[]>([]);
+  credito = signal(0);          // credito que tiene, si esta logueado
+  usarCredito = signal(false);  // si tildo usarlo
 
   // lo que eligio del candy: el producto y cuantos
   candyElegido = signal<{ producto: Producto; cantidad: number }[]>([]);
@@ -87,6 +89,14 @@ export class Compra implements OnInit, ConCambios {
       if (usuario?.email) {
         this.email.set(usuario.email);
         this.descuento.set(await this.comprasService.miDescuento());   // NUEVO cupon
+      
+        // su credito: la suma de sus movimientos de credito
+        let suma = 0;
+        for (const m of await this.comprasService.movimientos()) {
+          if (m.tipo === 'credito') suma += m.monto;
+        }
+        this.credito.set(suma);
+
       }
     } catch {
       this.error.set('No se pudo cargar la función.');
@@ -277,6 +287,23 @@ export class Compra implements OnInit, ConCambios {
     return this.entradasSueltas() - this.descuentoMonto() + this.totalCandy();
   }
 
+    // cuanto credito se usa: lo que tenga, hasta cubrir el total
+  creditoUsado() {
+    if (!this.usarCredito()) return 0;
+    return Math.min(this.credito(), this.totalFinal());
+  }
+
+  // lo que paga con plata
+  aPagar() {
+    return this.totalFinal() - this.creditoUsado();
+  }
+
+  // 1 punto por peso pagado sin credito, solo registrados
+  puntosAGanar() {
+    if (!this.auth.logueado()) return 0;
+    return Math.floor(this.aPagar());
+  }
+
   // EDAD
   // si la peli es +13 o +18: logueado → calculo con su fecha de nacimiento
   // sin cuenta → tiene que tildar "confirmo que soy mayor"
@@ -345,7 +372,7 @@ export class Compra implements OnInit, ConCambios {
       for (const x of this.candyElegido()) {
         items.push({ id: x.producto.id, cantidad: x.cantidad });
       }
-      const codigo = await this.comprasService.comprar(this.funcionId, this.elegidas(), this.email(), items);
+            const codigo = await this.comprasService.comprar(this.funcionId, this.elegidas(), this.email(), items, this.usarCredito());
       this.comprado = true;
       this.router.navigate(['/entrada', codigo]);
     } catch (e: any) {

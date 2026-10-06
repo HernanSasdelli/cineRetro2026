@@ -1,4 +1,5 @@
 @if (auth.perfil(); as p) {
+
   <section class="tarjeta">
     <h1>{{ p.nombre }} {{ p.apellido | uppercase }}</h1>
     <dl class="datos">
@@ -9,8 +10,45 @@
       <dt>Ojos</dt><dd>{{ p.color_ojos }}</dd>
       <dt>Vacaciones</dt><dd>{{ p.dias_vacaciones }} días por año</dd>
       <dt>Rol</dt><dd>{{ p.rol }}</dd>
-    </dl>    
+    </dl>
   </section>
+
+
+  <!-- ===== CREDITO Y PUNTOS (solo clientes) ===== -->
+
+  @if (p.rol === 'cliente') {
+
+    <section class="tarjeta perfil__saldos">
+      <div>
+        <p class="nota">Crédito disponible</p>
+        <p class="perfil__numero">{{ saldo('credito') | currency: 'ARS' }}</p>
+      </div>
+      <div>
+        <p class="nota">Puntos</p>
+        <p class="perfil__numero">{{ saldo('puntos') }}</p>
+      </div>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Historial</h2>
+      @for (m of movimientos(); track m.id) {
+        <p class="perfil__mov">
+          <span>{{ m.creado_en | date: 'dd/MM/yyyy HH:mm' }} · {{ m.motivo }}</span>
+          <span [class.perfil__mov--resta]="m.monto < 0">
+            @if (m.tipo === 'credito') {
+              {{ m.monto | currency: 'ARS' }}
+            } @else {
+              {{ m.monto }} puntos
+            }
+          </span>
+        </p>
+      } @empty {
+        <p class="nota">Todavía no tenés movimientos.</p>
+      }
+    </section>
+
+  } <!-- fin cliente -->
+
 } @else {
   <p class="nota">Cargando perfil...</p>
 }

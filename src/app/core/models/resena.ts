@@ -23,4 +23,5 @@ export interface MiPelicula {
   butacas: string[];
   estrellas: number | null;    // null es que todavia no la puntuo
   comentario: string | null;
+  total: number;   // para el cartel de cancelar
 }

@@ -128,3 +128,7 @@
   .registradora--abierta { transform: translateY(0); }
   .candy-grilla { grid-template-columns: repeat(2, 1fr); }
 }
+
+//el check para los puntos
+.check { display: flex; flex-direction: row; gap: 0.5rem; align-items: center; }
+.check input { width: auto; }

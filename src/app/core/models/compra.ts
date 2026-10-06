@@ -24,6 +24,8 @@ export interface Pedido {
   duracion_min: number;   // para saber cuando termina la funcion
   candy_entregado_en: string | null;   // null es que todavia no lo retiro
   items: ItemPedido[];   // el candy, vacio si no compro
+  credito_usado: number;
+  cancelada_en: string | null;   // null es que no se cancelo
 }
 
 // el cupon que le toca al usuario (funcion mi_descuento de la base)
@@ -42,4 +44,13 @@ export interface Cupon {
   solo_primera_compra: boolean;
   edad_minima: number | null;   // null es cualquier edad
   activo: boolean;
+}
+
+// un movimiento de credito o de puntos (el saldo es la suma)
+export interface Movimiento {
+  id: number;
+  tipo: 'credito' | 'puntos';
+  monto: number;   // positivo suma, negativo resta
+  motivo: string;
+  creado_en: string;
 }

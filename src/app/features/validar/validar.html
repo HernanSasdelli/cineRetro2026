@@ -26,6 +26,10 @@
 
         <p class="validar__estado validar__estado--bien">{{ mensaje() }}</p>
 
+      } @else if (p.cancelada_en) {
+
+        <p class="validar__estado validar__estado--mal">Esta compra fue cancelada.</p>
+        
       } @else if (p.usada_en) {
 
         <p class="validar__estado validar__estado--mal">

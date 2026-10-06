@@ -1,21 +1,25 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ResenasService } from '../../core/services/resenas.service';
+import { ComprasService } from '../../core/services/compras.service';
 import { MiPelicula } from '../../core/models/resena';
 import { EstrellasPipe } from '../../shared/pipes/estrellas.pipe';
 import { ConCambios } from '../../core/guards/cambios.guard';
+import { Modal } from '../../shared/components/modal/modal';
 
 // mis peliculas: arriba las que voy a ver, abajo las que ya vi
 // desde las ya vistas se puntua, una sola vez
+// las proximas se pueden cancelar hasta 2 horas antes, vuelve todo como credito
 @Component({
   selector: 'app-mis-peliculas',
-  imports: [DatePipe, RouterLink, EstrellasPipe],
+  imports: [DatePipe, CurrencyPipe, RouterLink, EstrellasPipe, Modal],
   templateUrl: './mis-peliculas.html',
   styleUrl: './mis-peliculas.scss',
 })
 export class MisPeliculas implements OnInit, ConCambios {
   private resenasService = inject(ResenasService);
+  private comprasService = inject(ComprasService);
 
   lista = signal<MiPelicula[]>([]);
   error = signal('');
@@ -24,6 +28,11 @@ export class MisPeliculas implements OnInit, ConCambios {
   comentario = signal('');
   enviando = signal(false);
   opciones = [1, 2, 3, 4, 5];
+
+  // cartel de cancelar
+  aCancelar = signal<MiPelicula | null>(null);
+  cancelando = signal(false);
+  errorCancelar = signal('');
 
   async ngOnInit() {
     await this.cargar();
@@ -55,6 +64,37 @@ export class MisPeliculas implements OnInit, ConCambios {
       if (new Date(m.inicio) <= ahora) res.push(m);
     }
     return res;
+  }
+
+  // se puede cancelar si faltan mas de 2 horas (la base lo vuelve a revisar)
+  puedeCancelar(m: MiPelicula) {
+    const dosHoras = 2 * 60 * 60 * 1000;
+    return new Date(m.inicio).getTime() - Date.now() > dosHoras;
+  }
+
+  pedirCancelar(m: MiPelicula) {
+    this.errorCancelar.set('');
+    this.aCancelar.set(m);
+  }
+
+  cerrarCancelar() {
+    this.aCancelar.set(null);
+  }
+
+  // confirmo en el cartel: la base cancela, libera las butacas y me da el credito
+  async confirmarCancelar() {
+    const m = this.aCancelar();
+    if (!m) return;
+    this.cancelando.set(true);
+    try {
+      await this.comprasService.cancelar(m.codigo);
+      this.aCancelar.set(null);
+      await this.cargar();
+    } catch (e: any) {
+      this.errorCancelar.set(e.message ?? 'No se pudo cancelar la compra.');
+    } finally {
+      this.cancelando.set(false);
+    }
   }
 
   empezar(m: MiPelicula) {

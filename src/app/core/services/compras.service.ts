@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import { Pedido, Descuento} from '../models/compra';
+import { Pedido, Descuento, Movimiento} from '../models/compra';
 
 // todo lo de comprar entradas. es el unico que toca pedidos y entradas
 @Injectable({ providedIn: 'root' })
@@ -39,20 +39,23 @@ export class ComprasService {
     return data;
   }*/
 
-    //--COMPRA NUEVA CON CANDY AGREGADO
+    ////--COMPRA NUEVA CON CANDY AGREGADO
+
+    //COMPRA con candy y creditos
       // compra: la base calcula todo. el candy va como [{ id, cantidad }], el precio lo pone la base
+   // compra: la base calcula todo. el candy va como [{ id, cantidad }], el precio lo pone la base
   async comprar(funcionId: number, butacas: string[], email: string,
-                items: { id: number; cantidad: number }[]): Promise<string> {
+                items: { id: number; cantidad: number }[], usarCredito: boolean): Promise<string> {
     const { data, error } = await this.sb.rpc('comprar', {
       p_funcion_id: funcionId,
       p_butacas: butacas,
       p_email: email,
       p_items: items,
+      p_usar_credito: usarCredito,
     });
     if (error) throw error;
     return data;
   }
-
 
     // trae una compra por su codigo. si no existe, la base devuelve null
   async verPedido(codigo: string): Promise<Pedido> {
@@ -89,6 +92,23 @@ export class ComprasService {
     const { data, error } = await this.sb.rpc('entregar_candy', { p_codigo: codigo });
     if (error) throw error;
     return data;
+  }
+
+
+    // credito y puntos del usuario, los mas nuevos primero. la RLS hace que vea solo los suyos
+  async movimientos(): Promise<Movimiento[]> {
+    const { data, error } = await this.sb
+      .from('movimientos')
+      .select('id, tipo, monto, motivo, creado_en')
+      .order('creado_en', { ascending: false });
+    if (error) throw error;
+    return data;
+  }
+
+  // cancela la compra. la base revisa todo: que sea suya, 2 horas antes, sin usar
+  async cancelar(codigo: string) {
+    const { error } = await this.sb.rpc('cancelar_compra', { p_codigo: codigo });
+    if (error) throw error;
   }
   
 }

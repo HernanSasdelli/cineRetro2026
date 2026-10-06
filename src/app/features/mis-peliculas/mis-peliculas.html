@@ -11,6 +11,10 @@
         <p>{{ m.inicio | date: 'EEEE dd/MM HH:mm' }} · {{ m.sala }}</p>
         <p class="nota">Butacas: {{ m.butacas.join(', ') }}</p>
         <a class="btn" [routerLink]="['/entrada', m.codigo]">Ver entrada</a>
+
+           @if (puedeCancelar(m)) {
+            <button type="button" class="btn btn--linea" (click)="pedirCancelar(m)">Cancelar compra</button>
+        }
       </div>
     </div>
   } @empty {
@@ -52,3 +56,29 @@
     <p class="nota">Todavía no viste ninguna película con nosotros.</p>
   }
 </section>
+
+<!-- cartel de cancelar -->
+@if (aCancelar(); as m) {
+
+  @if (errorCancelar()) {
+
+    <app-modal titulo="No se pudo cancelar" textoConfirmar="Cerrar" (confirmar)="cerrarCancelar()">
+      <p>{{ errorCancelar() }}</p>
+    </app-modal>
+
+  } @else {
+
+    <app-modal titulo="Cancelar compra"
+               [textoConfirmar]="cancelando() ? 'Cancelando...' : 'Cancelar compra'"
+               textoCancelar="Volver"
+               [ocupado]="cancelando()"
+               (confirmar)="confirmarCancelar()"
+               (cancelar)="cerrarCancelar()">
+      <p>¿Cancelar tu compra de <strong>{{ m.titulo }}</strong> del {{ m.inicio | date: 'EEEE dd/MM HH:mm' }}?</p>
+      <p>Se cancela completa (entradas y candy) y se te acreditan <strong>{{ m.total | currency: 'ARS' }}</strong> en tu cuenta para próximas compras.</p>
+      <p class="nota">Los puntos que te dio esta compra se descuentan.</p>
+    </app-modal>
+
+  } <!-- fin error -->
+
+} <!-- fin cartel -->

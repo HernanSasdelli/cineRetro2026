@@ -118,6 +118,28 @@
         <span>{{ totalFinal() | currency: 'ARS' }}</span>
       </p>
 
+      <!-- credito: solo si tiene -->
+      @if (credito() > 0) {
+        <label class="check">
+          <input type="checkbox" [checked]="usarCredito()" (change)="usarCredito.set(!usarCredito())">
+          Usar mi crédito ({{ credito() | currency: 'ARS' }})
+        </label>
+        @if (creditoUsado() > 0) {
+          <p class="reg__linea reg__linea--desc">
+            <span>Crédito usado</span>
+            <span>-{{ creditoUsado() | currency: 'ARS' }}</span>
+          </p>
+          <p class="reg__total">
+            <span>A pagar</span>
+            <span>{{ aPagar() | currency: 'ARS' }}</span>
+          </p>
+        }
+      }
+
+      @if (puntosAGanar() > 0) {
+        <p class="reg__nota">Con esta compra sumás <strong>{{ puntosAGanar() }} puntos</strong>.</p>
+      }
+
       <!-- mail y edad -->
       @if (auth.logueado()) {
         <p class="reg__nota">La entrada va a {{ email() }}</p>

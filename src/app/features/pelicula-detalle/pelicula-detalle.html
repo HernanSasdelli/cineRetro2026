@@ -1,61 +1,133 @@
 <a routerLink="/cartelera" class="volver">← Volver a la cartelera</a>
 
+
 @if (peli(); as p) {
-<article class="detalle">
-  <img class="detalle__poster" [src]="p.imagen_url || '/posters/placeholder.svg'" [alt]="'Póster de ' + p.titulo"
-    (error)="sinPoster($event)">
 
-  <div class="detalle__info">
-    <h1>{{ p.titulo }}</h1>
+  <article class="detalle">
 
-    <p class="detalle__meta">
-      {{ p.duracion_min | duracion }}
+    <img class="detalle__poster"
+         [src]="p.imagen_url || '/posters/placeholder.svg'"
+         [alt]="'Póster de ' + p.titulo"
+         (error)="sinPoster($event)">
+
+
+    <div class="detalle__info">
+
+      <!-- ===== DATOS DE LA PELI ===== -->
+
+      <h1>{{ p.titulo }}</h1>
+
+      <p class="detalle__meta">
+        {{ p.duracion_min | duracion }}
+
+        @if (p.restriccion_edad) {
+          <span class="edad">+{{ p.restriccion_edad }}</span>
+        } @else {
+          <span class="edad edad--atp">ATP</span>
+        } <!-- fin edad -->
+      </p>
+
+      <div class="chips">
+        @for (g of p.generos; track g.id) {
+          <span class="chip">{{ g.nombre }}</span>
+        } <!-- fin generos -->
+      </div>
+
+      <p class="detalle__sinopsis">{{ p.sinopsis }}</p>
+
       @if (p.restriccion_edad) {
-      <span class="edad">+{{ p.restriccion_edad }}</span>
+        <p class="aviso">
+          Apta para mayores de {{ p.restriccion_edad }} años.
+          Los menores deben asistir acompañados de un adulto.
+        </p>
+      } <!-- fin aviso edad -->
+
+
+      <!-- ===== RESEÑAS ===== -->
+
+      <h2>Reseñas</h2>
+
+      @if (resenas().length > 0) {
+
+        <p class="promedio">
+          ★ {{ promedio() }}
+          <span class="nota">
+            ({{ resenas().length }} {{ resenas().length === 1 ? 'reseña' : 'reseñas' }})
+          </span>
+        </p>
+
+        @for (r of resenas(); track r.creada_en) {
+          <div class="resena">
+            <p>
+              <strong>{{ r.nombre }}</strong>
+              <span class="resena__estrellas">{{ r.estrellas | estrellas }}</span>
+            </p>
+
+            @if (r.comentario) {
+              <p>{{ r.comentario }}</p>
+            } <!-- fin comentario -->
+          </div>
+        } <!-- fin for resenas -->
+
       } @else {
-      <span class="edad edad--atp">ATP</span>
-      }
-    </p>
 
-    <div class="chips">
-      @for (g of p.generos; track g.id) {
-      <span class="chip">{{ g.nombre }}</span>
-      }
-    </div>
+        <p class="nota">Todavía no tiene reseñas.</p>
 
-    <p class="detalle__sinopsis">{{ p.sinopsis }}</p>
+      } <!-- fin resenas -->
 
-    @if (p.restriccion_edad) {
-    <p class="aviso">Apta para mayores de {{ p.restriccion_edad }} años. Los menores deben asistir acompañados de un
-      adulto.</p>
-    }
-    <h2>Funciones</h2>
 
-   
-    @if (estado() === 'proximamente') {
-      <p>Las entradas salen a la venta el <strong>{{ ventaDesde() | date: 'EEEE dd/MM' : 'UTC' }}</strong>.</p>
-    @if (auth.logueado()) {
-      <button type="button" class="btn" (click)="cambiarAlerta()">
-        {{ tieneAlerta() ? 'Quitar alerta' : 'Avisame cuando salga a la venta' }}
-      </button>
-    } @else {
-      <p class="nota"><a routerLink="/login">Iniciá sesión</a> para que te avisemos cuando salga a la venta.</p>
-      }
-    } @else {
-      @for (f of funciones(); track f.id) {
-      <a class="chip" [routerLink]="['/compra', f.id]">
-        {{ f.inicio | date: 'EEE dd/MM HH:mm' }} · {{ f.salas.nombre }} ·
-        {{ f.formato }} {{ f.idioma | titlecase }}
-      </a>
-    } @empty {
-      <p class="nota">Por ahora no hay funciones programadas.</p>
-    }
-    }
+      <!-- ===== FUNCIONES ===== -->
 
-  </div>
-</article>
+      <h2>Funciones</h2>
+
+      @if (estado() === 'proximamente') {
+
+        <p>
+          Las entradas salen a la venta el
+          <strong>{{ ventaDesde() | date: 'EEEE dd/MM' : 'UTC' }}</strong>.
+        </p>
+
+        @if (auth.logueado()) {
+          <button type="button" class="btn" (click)="cambiarAlerta()">
+            {{ tieneAlerta() ? 'Quitar alerta' : 'Avisame cuando salga a la venta' }}
+          </button>
+        } @else {
+          <p class="nota">
+            <a routerLink="/login">Iniciá sesión</a> para que te avisemos cuando salga a la venta.
+          </p>
+        } <!-- fin logueado -->
+
+      } @else {
+
+        @if (auth.rol() === 'admin') {
+
+          <p class="nota">Las cuentas de administrador no pueden comprar entradas.</p>
+
+        } @else {
+
+          @for (f of funciones(); track f.id) {
+            <a class="chip" [routerLink]="['/compra', f.id]">
+              {{ f.inicio | date: 'EEE dd/MM HH:mm' }} · {{ f.salas.nombre }} ·
+              {{ f.formato }} {{ f.idioma | titlecase }}
+            </a>
+          } @empty {
+            <p class="nota">Por ahora no hay funciones programadas.</p>
+          } <!-- fin for funciones -->
+
+        } <!-- fin admin -->
+
+      } <!-- fin proximamente -->
+
+    </div> <!-- fin detalle__info -->
+
+  </article>
+
 } @else if (error()) {
-<p class="error">{{ error() }}</p>
+
+  <p class="error">{{ error() }}</p>
+
 } @else {
-<p class="nota">Cargando...</p>
-}
+
+  <p class="nota">Cargando...</p>
+
+} <!-- fin peli -->

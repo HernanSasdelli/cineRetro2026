@@ -55,3 +55,7 @@
   .detalle { grid-template-columns: 1fr; }
   .detalle__poster { max-width: 280px; }
 }
+.promedio { font-size: 1.3rem; font-weight: bold; color: #e07b2e; }
+.resena { padding: 0.5rem 0; border-bottom: 1px dashed currentColor; }
+.resena p { margin: 0.2rem 0; }
+.resena__estrellas { color: #e07b2e; }

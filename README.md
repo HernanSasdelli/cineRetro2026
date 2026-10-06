@@ -91,8 +91,8 @@ src/app/
     - [x] Cupones 
     - [] Puntos de fidelización
     - [] Crédito por cancelación
-- [ ] Preventa, sección "Próximamente" y alertas
-- [ ] Reseñas y "Mis películas"
+- [x] Preventa, sección "Próximamente" y alertas
+- [x] Reseñas y "Mis películas"
 - [ ] Reportes, exportación a PDF/Excel, gráficos y log de actividad
 
 Detalle de los requerimientos y las decisiones[REQUERIMIENTOS.md](REQUERIMIENTOS.md).

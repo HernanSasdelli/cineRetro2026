@@ -6,6 +6,9 @@
 
     @if (auth.logueado()) {
       <a routerLink="/perfil" routerLinkActive="activo">{{ auth.perfil()?.nombre ?? 'Mi perfil' }}</a>
+    
+    @if (auth.rol() !== 'admin') {
+      <a routerLink="/mis-peliculas" routerLinkActive="activo">Mis películas</a>}
 
 
       <!-- solo visual, la seguridad es la RLS (meterse con f12 salteando el html)-->

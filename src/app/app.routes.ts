@@ -46,5 +46,16 @@ export const routes: Routes = [
     path: 'entrada/:codigo',
     loadComponent: () => import('./features/entrada/entrada').then(m => m.Entrada),
   },
+
+  {
+    // solo clientes: el admin no compra, no tiene peliculas
+    path: 'mis-peliculas',
+    canMatch: [authGuard, rolGuard],
+    data: { roles: ['cliente'] },
+    canDeactivate: [cambiosGuard],
+    loadComponent: () => import('./features/mis-peliculas/mis-peliculas').then(m => m.MisPeliculas),
+  },
+
+  
   { path: '**', redirectTo: 'cartelera' },
 ];

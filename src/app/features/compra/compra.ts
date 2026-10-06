@@ -190,6 +190,11 @@ export class Compra implements OnInit, ConCambios {
   // 4. atajo el error 23505 de la base si alguien me gano de mano y cancelo todas las butacas elegidas
   ///agregar tiempo de reserva tipo cinemark
   async comprar() {
+        // el admin no compra, la base igual lo rechaza
+    if (this.auth.rol() === 'admin') {
+      this.error.set('Las cuentas de administrador no pueden comprar entradas.');
+      return;
+    }
     if (this.elegidas().length === 0) {
       this.error.set('Elegí al menos una butaca.');
       return;

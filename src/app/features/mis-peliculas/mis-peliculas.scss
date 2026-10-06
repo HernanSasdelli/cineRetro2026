@@ -1,0 +1,20 @@
+.mis { max-width: 800px; margin: 0 auto; }
+.mi-peli {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px dashed currentColor;
+}
+.mi-peli img { width: 90px; aspect-ratio: 2 / 3; object-fit: cover; border: 1px solid #2b1f1a; }
+.mi-peli h3 { margin: 0 0 0.3rem; }
+.mi-peli textarea { width: 100%; margin: 0.5rem 0; }
+.mis__estrellas { color: #e07b2e; font-size: 1.2rem; margin: 0.3rem 0; }
+.estrella {
+  border: none;
+  background: none;
+  font-size: 1.8rem;
+  color: #c9bfae;
+  cursor: pointer;
+  padding: 0 0.1rem;
+}
+.estrella.activa { color: #e07b2e; }

@@ -1,6 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 
-import { PeliculasService } from '../../core/services/peliculas.service';
 import { Genero, Pelicula } from '../../core/models/pelicula';
 
 import { RouterLink } from '@angular/router';
@@ -9,8 +8,10 @@ import { TarjetaPelicula } from './tarjeta-pelicula/tarjeta-pelicula';
 
 import { estadoPelicula } from '../../shared/utils/estreno';
 
+import { PeliculasService } from '../../core/services/peliculas.service';
 import { AuthService } from '../../core/services/auth.service';
 import { AlertasService } from '../../core/services/alertas.service';
+import { ResenasService } from '../../core/services/resenas.service';
 
 import { SliderDestacadas } from './slider-destacadas/slider-destacadas';
 import { FilaPeliculas } from './fila-peliculas/fila-peliculas';
@@ -36,16 +37,23 @@ export class Cartelera implements OnInit {
   private auth = inject(AuthService);
   private alertasService = inject(AlertasService);
   avisos = signal<Pelicula[]>([]);   // pelis con alerta que ya salieron a la venta
+  private resenasService = inject(ResenasService);
 
 
 
   // al entrar: traigo peliculas, generos y las 3 mas vendidas
   async ngOnInit() {
-
-
      //aca esta el cach que no entendia!! es igual que en c#
     try {
-          this.peliculas.set(await this.pelisService.listar());
+      const pelis = await this.pelisService.listar();
+      // le pego a cada peli su promedio de estrellas, si tiene
+      const proms = await this.resenasService.promedios();
+      for (const p of pelis) {
+        for (const x of proms) {
+          if (x.pelicula_id === p.id) p.promedio = x.promedio;
+        }
+      }
+      this.peliculas.set(pelis);
           this.generos.set(await this.pelisService.generos());
 
           // busco en la lista que ya tengo las 3 mas vendidas, en el orden que vienen

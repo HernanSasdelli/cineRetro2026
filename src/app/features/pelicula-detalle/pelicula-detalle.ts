@@ -10,9 +10,13 @@ import { AuthService } from '../../core/services/auth.service';
 import { AlertasService } from '../../core/services/alertas.service';
 import { estadoPelicula, inicioPreventa } from '../../shared/utils/estreno';
 
+import { ResenasService } from '../../core/services/resenas.service';
+import { Resena } from '../../core/models/resena';
+import { EstrellasPipe } from '../../shared/pipes/estrellas.pipe';
+
 @Component({
   selector: 'app-pelicula-detalle',
-  imports: [RouterLink, DuracionPipe, DatePipe, TitleCasePipe],
+  imports: [RouterLink, DuracionPipe, DatePipe, TitleCasePipe, EstrellasPipe],
   templateUrl: './pelicula-detalle.html',
   styleUrl: './pelicula-detalle.scss',
 })
@@ -28,6 +32,8 @@ private route = inject(ActivatedRoute);
   protected auth = inject(AuthService);   // el html pregunta si esta logueado
   private alertasService = inject(AlertasService);
   tieneAlerta = signal(false);
+  private resenasService = inject(ResenasService);
+  resenas = signal<Resena[]>([]);
 
 // al iniciar, saco el id de la url y busco la pelicula
 async ngOnInit() {
@@ -35,6 +41,7 @@ async ngOnInit() {
   const id = Number(this.route.snapshot.paramMap.get('id'));
   try {
     this.peli.set(await this.pelisService.obtener(id));
+    this.resenas.set(await this.resenasService.dePelicula(id));
     this.funciones.set(await this.funcionesService.dePelicula(id));
 
     // si esta logueado, me fijo si ya pidio que le avisen de esta peli
@@ -84,5 +91,15 @@ async ngOnInit() {
 
   sinPoster(e: Event) {
     (e.target as HTMLImageElement).src = '/posters/placeholder.svg';
+  }
+
+
+    // promedio de las reseñas con un decimal
+  promedio() {
+    let suma = 0;
+    for (const r of this.resenas()) {
+      suma += r.estrellas;
+    }
+    return (suma / this.resenas().length).toFixed(1);
   }
 }

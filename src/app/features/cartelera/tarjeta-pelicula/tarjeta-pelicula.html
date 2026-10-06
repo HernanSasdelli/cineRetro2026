@@ -11,6 +11,7 @@
     <p class="ticket__meta">
       {{ pelicula().duracion_min | duracion }}
       @if (pelicula().restriccion_edad) { <span class="edad">+{{ pelicula().restriccion_edad }}</span> }
+      @if (pelicula().promedio) { <span class="puntaje">★ {{ pelicula().promedio }}</span> }
     </p>
 
     <p class="ticket__generos">{{ generosTexto() }}</p>

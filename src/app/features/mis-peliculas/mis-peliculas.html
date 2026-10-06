@@ -1,0 +1,54 @@
+<section class="mis">
+  <h1>Mis películas</h1>
+  @if (error()) { <p class="error">{{ error() }}</p> }
+
+  <h2>Próximas</h2>
+  @for (m of proximas(); track m.codigo) {
+    <div class="mi-peli">
+      <img [src]="m.imagen_url || '/posters/placeholder.svg'" [alt]="m.titulo">
+      <div>
+        <h3>{{ m.titulo }}</h3>
+        <p>{{ m.inicio | date: 'EEEE dd/MM HH:mm' }} · {{ m.sala }}</p>
+        <p class="nota">Butacas: {{ m.butacas.join(', ') }}</p>
+        <a class="btn" [routerLink]="['/entrada', m.codigo]">Ver entrada</a>
+      </div>
+    </div>
+  } @empty {
+    <p class="nota">No tenés funciones por ver.</p>
+  }
+
+  <h2>Ya vistas</h2>
+  @for (m of vistas(); track m.codigo) {
+    <div class="mi-peli">
+      <img [src]="m.imagen_url || '/posters/placeholder.svg'" [alt]="m.titulo">
+      <div>
+        <h3>{{ m.titulo }}</h3>
+        <p>{{ m.inicio | date: 'EEEE dd/MM/yyyy' }} · {{ m.sala }}</p>
+
+        @if (m.estrellas) {
+          <p class="mis__estrellas">{{ m.estrellas | estrellas }}</p>
+          @if (m.comentario) { <p>"{{ m.comentario }}"</p> }
+          <p class="nota">Ya la puntuaste.</p>
+        } @else if (calificando() === m.pelicula_id) {
+          <div>
+            @for (n of opciones; track n) {
+              <button type="button" class="estrella" [class.activa]="n <= estrellas()" (click)="estrellas.set(n)">★</button>
+            }
+          </div>
+          <textarea rows="2" maxlength="280" placeholder="Comentario corto (opcional)"
+                    [value]="comentario()" (input)="escribirComentario($event)"></textarea>
+          <div class="acciones">
+            <button type="button" class="btn btn--linea" (click)="cancelar()">Cancelar</button>
+            <button type="button" class="btn" [disabled]="enviando()" (click)="publicar(m)">
+              {{ enviando() ? 'Publicando...' : 'Publicar' }}
+            </button>
+          </div>
+        } @else {
+          <button type="button" class="btn" (click)="empezar(m)">Calificar</button>
+        }
+      </div>
+    </div>
+  } @empty {
+    <p class="nota">Todavía no viste ninguna película con nosotros.</p>
+  }
+</section>

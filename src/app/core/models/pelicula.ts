@@ -16,6 +16,7 @@ export interface Pelicula {
   fecha_estreno: string | null;     // null es que ya esta estrenada
   tiene_preventa: boolean;
   precio_preventa: number | null;
+  promedio?: number;   // no esta en la tabla, lo pego en la cartelera
   
  
 }
